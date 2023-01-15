@@ -44,15 +44,15 @@ jobs:
         env:
           AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
           AWS_BUCKET_KEY_NAME: ${{ secrets.AWS_BUCKET_KEY_NAME }}
-        run: terraform init -backend-config="bucket=${AWS_BUCKET_NAME}" -backend-config="key=${AWS_BUCKET_KEY_NAME}" -backend-config="region=${AWS_REGION}" ./terraform
+        run: terraform init -backend-config="bucket=${AWS_BUCKET_NAME}" -backend-config="key=${AWS_BUCKET_KEY_NAME}" -backend-config="region=${AWS_REGION}"
 
       - name: Terraform Validation
         id: validate
-        run: terraform validate -no-color ./terraform
+        run: terraform validate -no-color
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color ./terraform
+        run: terraform plan -no-color
         if: github.event_name == 'pull_request'
         continue-on-error: true
 

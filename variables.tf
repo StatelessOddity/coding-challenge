@@ -31,10 +31,6 @@ variable "settings" {
     "compute" = {
       count = 2
       instance_type = "t2.micro"
-      name = {
-        type = list(string)
-        default = [ "Node" , "Gateway" ]
-      }
     }
   }
 }
@@ -50,16 +46,4 @@ variable "rdx_private_subnet_cidr_blocks" {
   description = "Avalible CIRD blocks for RDX private subnets"
   type = list(string)
   default = [ "10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24", "10.0.104.0/24" ]
-}
-
-variable "db_username" {
-  description = "Master user for the database"
-  type = string
-  sensitive = true
-}
-
-variable "db_password" {
-  description = "Password for the database master user"
-  type = string
-  sensitive = true
 }
