@@ -1,22 +1,3 @@
-terraform {
-  required_providers {
-    github = {
-      source  = "integrations/github"
-      version = "~> 5.0"
-    }
-  } 
-#  backend "s3" {
-#    region = "us-east-1"
-#    key    = "terraform.tfstate"
-#  }
-}
-
-provider "aws" {
-  region = "us-east-1"
-}
-
-provider "github" {}
-
 resource "aws_vpc" "rdx_vpc" {
   cidr_block = var.rdx_vpc_cidr_block
   enable_dns_hostnames = true
@@ -24,6 +5,8 @@ resource "aws_vpc" "rdx_vpc" {
     "Name" = "RDX VPC"
   }
 }
+
+/*
 
 resource "aws_internet_gateway" "rdx_internet_gateway" {
   vpc_id = aws_vpc.rdx_vpc.id
@@ -55,3 +38,5 @@ resource "aws_subnet" "rdx_private_subnet" {
 resource "github_action_secret" "example_secret" {
   
 }
+
+*/

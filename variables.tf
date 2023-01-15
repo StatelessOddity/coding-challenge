@@ -26,7 +26,7 @@ variable "settings" {
       engine = "postgres"
       engine_version = "todo"
       instance_class = "db.t2.micro"
-      db_name = 
+      db_name = "test"
     },
     "compute" = {
       count = 2
