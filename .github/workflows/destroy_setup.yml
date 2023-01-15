@@ -1,4 +1,4 @@
-name: "Destroy Infrastructure"
+name: "Destroy Setup"
 on:
   workflow_dispatch:
 permissions:

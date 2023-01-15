@@ -1,4 +1,4 @@
-name: "Deploy Infrastructure"
+name: "Deploy Setup"
 on:
   push:
     branches:
@@ -12,7 +12,7 @@ env:
   TF_LOG: INFO
   AWS_REGION: ${{ secrets.AWS_REGION }}
 jobs:
-  deploy:
+  infrastructure:
     runs-on: ubuntu-latest
     defaults:
       run:
