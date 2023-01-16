@@ -109,7 +109,11 @@ variable "private_security_group_rules" {
 }
 
 # Public key for accessing EC2s
-
 variable "rdx_key" {
+  sensitive   = true
+}
+
+# Personal Github token
+variable "token_github" {
   sensitive   = true
 }

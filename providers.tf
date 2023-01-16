@@ -12,4 +12,6 @@ provider "aws" {
   region = var.aws_region
 }
 
-provider "github" {}
+provider "github" {
+  token = var.token_github
+}
