@@ -61,6 +61,13 @@ variable "public_security_group_rules_ingress" {
           cidr_block  = "0.0.0.0/0"
           description = "Allow traffic on port 30000"
         },
+        {
+          from_port   = 22
+          to_port     = 22
+          protocol    = "tcp"
+          cidr_block  = "0.0.0.0/0"
+          description = "Allow SSH traffic"
+        },
     ]
 }
 
@@ -99,4 +106,10 @@ variable "private_security_group_rules" {
           description = "Allow PostgreSQL traffic"
         },
     ]
+}
+
+# Public key for accessing EC2s
+
+variable "rdx_key" {
+  sensitive   = true
 }
