@@ -63,3 +63,20 @@ variable "public_security_group_rules" {
         },
     ]
 }
+
+variable "private_security_group_rules" {
+    type = list(object({
+      from_port   = number
+      to_port     = number
+      protocol    = string
+      description = string
+    }))
+    default     = [
+        {
+          from_port   = 443
+          to_port     = 443
+          protocol    = "tcp"
+          description = "Allow PostgreSQL traffic"
+        },
+    ]
+}
