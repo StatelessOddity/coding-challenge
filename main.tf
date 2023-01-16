@@ -45,22 +45,10 @@ resource "aws_subnet" "rdx_private_subnet" {
 
 resource "aws_route_table" "rdx_public_route_table" {
   vpc_id = aws_vpc.rdx_vpc.id
-  route = [{
+  route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.rdx_internet_gateway.id
-    carrier_gateway_id         = ""
-    core_network_arn           = ""
-    destination_prefix_list_id = ""
-    egress_only_gateway_id     = ""
-    instance_id                = ""
-    ipv6_cidr_block            = ""
-    local_gateway_id           = ""
-    nat_gateway_id             = ""
-    network_interface_id       = ""
-    transit_gateway_id         = ""
-    vpc_endpoint_id            = ""
-    vpc_peering_connection_id  = ""
-  }]
+  }
 }
 
 resource "aws_route_table_association" "public" {
