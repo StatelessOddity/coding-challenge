@@ -64,7 +64,7 @@ variable "public_security_group_rules_ingress" {
     ]
 }
 
-variable "public_security_group_rules_engress" {
+variable "public_security_group_rules_egress" {
     type = list(object({
       from_port   = number
       to_port     = number

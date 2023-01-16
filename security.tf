@@ -15,14 +15,14 @@ resource "aws_security_group_rule" "rdx_public_security_group_rules_ingress" {
   security_group_id = aws_security_group.rdx_public_security_group.id
 }
 
-resource "aws_security_group_rule" "rdx_public_security_group_rules_engress" {
-  count = length(var.public_security_group_rules_engress)
-  type              = "engress"
-  from_port         = var.public_security_group_rules_engress[count.index].from_port
-  to_port           = var.public_security_group_rules_engress[count.index].to_port
-  protocol          = var.public_security_group_rules_engress[count.index].protocol
-  cidr_blocks       = [var.public_security_group_rules_engress[count.index].cidr_block]
-  description       = var.public_security_group_rules_engress[count.index].description
+resource "aws_security_group_rule" "rdx_public_security_group_rules_egress" {
+  count = length(var.public_security_group_rules_egress)
+  type              = "egress"
+  from_port         = var.public_security_group_rules_egress[count.index].from_port
+  to_port           = var.public_security_group_rules_egress[count.index].to_port
+  protocol          = var.public_security_group_rules_egress[count.index].protocol
+  cidr_blocks       = [var.public_security_group_rules_egress[count.index].cidr_block]
+  description       = var.public_security_group_rules_egress[count.index].description
   security_group_id = aws_security_group.rdx_public_security_group.id
 }
 
