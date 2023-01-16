@@ -6,6 +6,6 @@ resource "aws_instance" "full_node_ec2" {
   vpc_security_group_ids = [aws_security_group.rdx_public_security_group.id]
   
   tags = {
-    Name = "RDX Full Node ${count.index}"
+Name = "${format("RDX Full Node", count.index + 1)}"
   }
 }
