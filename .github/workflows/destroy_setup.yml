@@ -8,6 +8,7 @@ permissions:
 env:
   TF_LOG: INFO
   AWS_REGION: ${{ secrets.AWS_REGION }}
+  TF_VAR_rdx_key: ${{ secrets.RDX_KEY }}
 jobs:
   destroy:
     runs-on: ubuntu-latest
@@ -44,4 +45,4 @@ jobs:
 
       - name: Terraform Destroy
         id: destroy
-        run: terraform destroy -auto-approve -force
+        run: terraform destroy -auto-approve
