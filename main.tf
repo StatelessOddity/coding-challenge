@@ -99,13 +99,13 @@ resource "aws_security_group_rule" "rdx_public_security_group_rules" {
 resource "aws_security_group" "rdx_private_security_group" {
   name = "rdx_private_security_group"
   description = "security group for the Gateway API PostgreSQL Database"
-  vpc_id = aws_vpc.rdx_vpc
+  vpc_id = aws_vpc.rdx_vpc.id
 
   ingress = [ {
     description = "Allow PostgreSQL traffic fom Node and Gateway"
     from_port = 5432
     protocol = "tcp"
-    security_groups = [aws_security_group.rdx_public_security_group]
+    security_groups = aws_security_group.rdx_public_security_group
     to_port = 5432
     cidr_blocks = []
     ipv6_cidr_blocks= []
@@ -121,19 +121,20 @@ resource "aws_db_subnet_group" "rdx_private_subnet_group" {
 }
 
 data "aws_ami" "ubuntu" {
-  most_recent = "true"
 
-  filter {
-    name = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
+    most_recent = true
 
-  filter {
-    name = "virtualization-type"
-    values = ["hmv"]
-  }
+    filter {
+        name   = "name"
+        values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+    }
 
-  owners = ["099720109477"]
+    filter {
+        name = "virtualization-type"
+        values = ["hvm"]
+    }
+
+    owners = ["099720109477"]
 }
 
 resource "aws_instance" "full_node_ec2" {
