@@ -13,7 +13,7 @@ variable "rdx_vpc_subnet_count" {
   type = map(number)
   default = {
     public = 1,
-    private = 1
+    private = 2
   }
 }
 
