@@ -13,37 +13,70 @@ variable "rdx_vpc_subnet_count" {
   type = map(number)
   default = {
     public = 1,
-    private = 1
+    private = 2
   }
 }
 
-variable "settings" {
-  description = "Configuration for the EC2s and DB"
+variable "full_node_ec2" {
+  description = "Configuration of the full node EC2 instance"
   type = map(any)
   default = {
-    "database" = {
-      allocated_storage = 10
-      engine = "postgres"
-      engine_version = "todo"
-      instance_class = "db.t2.micro"
-      db_name = "test"
-    },
-    "compute" = {
-      count = 2
-      instance_type = "t2.micro"
-    }
+    instance_type = "t2.micro"
+    count = 1
   }
 }
-#TODO: Settings for EC2s and RDS
 
 variable "rdx_public_subnet_cidr_blocks" {
   description = "Avalible CIRD blocks for RDX public subnets"
   type = list(string)
-  default = [ "10.0.1.0/24", "10.0.2.0/24" ]
+  default = [ "10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24", "10.0.4.0/24" ]
 }
 
 variable "rdx_private_subnet_cidr_blocks" {
   description = "Avalible CIRD blocks for RDX private subnets"
   type = list(string)
   default = [ "10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24", "10.0.104.0/24" ]
+}
+
+variable "public_security_group_rules" {
+    type = list(object({
+      from_port   = number
+      to_port     = number
+      protocol    = string
+      cidr_block  = string
+      description = string
+    }))
+    default     = [
+        {
+          from_port   = 443
+          to_port     = 443
+          protocol    = "tcp"
+          cidr_block  = "0.0.0.0/0"
+          description = "Allow HTTPS traffic"
+        },
+        {
+          from_port   = 30000
+          to_port     = 30000
+          protocol    = "tcp"
+          cidr_block  = "0.0.0.0/0"
+          description = "Allow traffic on port 30000"
+        },
+    ]
+}
+
+variable "private_security_group_rules" {
+    type = list(object({
+      from_port   = number
+      to_port     = number
+      protocol    = string
+      description = string
+    }))
+    default     = [
+        {
+          from_port   = 443
+          to_port     = 443
+          protocol    = "tcp"
+          description = "Allow PostgreSQL traffic"
+        },
+    ]
 }
