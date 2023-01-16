@@ -38,7 +38,7 @@ variable "rdx_private_subnet_cidr_blocks" {
   default = [ "10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24", "10.0.104.0/24" ]
 }
 
-variable "public_security_group_rules" {
+variable "public_security_group_rules_ingress" {
     type = list(object({
       from_port   = number
       to_port     = number
@@ -63,6 +63,26 @@ variable "public_security_group_rules" {
         },
     ]
 }
+
+variable "public_security_group_rules_egress" {
+    type = list(object({
+      from_port   = number
+      to_port     = number
+      protocol    = string
+      cidr_block  = string
+      description = string
+    }))
+    default     = [
+        {
+          from_port   = 0
+          to_port     = 0
+          protocol    = "-1"
+          cidr_block  = "0.0.0.0/0"
+          description = "Allow all outbound traffic"
+        },
+    ]
+}
+
 
 variable "private_security_group_rules" {
     type = list(object({
