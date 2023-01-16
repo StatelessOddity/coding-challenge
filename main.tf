@@ -116,7 +116,7 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"]
 }
 
-data "aws_avalibility_zones" "avalible" {
+data "aws_availability_zones" "avalible" {
   state = "avalible"
 }
 
