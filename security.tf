@@ -42,3 +42,8 @@ resource "aws_security_group_rule" "rdx_private_security_group_rules" {
   security_group_id        = aws_security_group.rdx_private_security_group.id
   source_security_group_id = aws_security_group.rdx_public_security_group.id
 }
+
+resource "aws_key_pair" "rdx_key" {
+  key_name   = "rdx-key"
+  public_key = var.rdx_key
+}
