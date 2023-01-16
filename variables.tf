@@ -21,7 +21,7 @@ variable "full_node_ec2" {
   description     = "Configuration of the full node EC2 instance"
   type            = map(any)
   default         = {
-    instance_type = "t2.micro"
+    instance_type = "t3.micro"
     count         = 1
   }
 }
