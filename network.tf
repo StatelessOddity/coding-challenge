@@ -74,6 +74,6 @@ resource "aws_eip" "fullnode_ips" {
   instance = aws_instance.full_node_ec2[count.index].id
   vpc = true
   tags = {
-    "Name" = "Full Node IP ${count.index}"
+    "Name" = "Full Node IP ${count.index +1}"
   }  
 }
