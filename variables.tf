@@ -4,38 +4,38 @@ variable "aws_region" {
 
 variable "rdx_vpc_cidr_block" {
   description = "CIDR block for the VPC"
-  type = string
-  default = "10.0.0.0/16"
+  type        = string
+  default     = "10.0.0.0/16"
 }
 
 variable "rdx_vpc_subnet_count" {
   description = "Number of subnets for the VPC"
-  type = map(number)
-  default = {
-    public = 1,
-    private = 2
+  type        = map(number)
+  default     = {
+    public    = 1,
+    private   = 2
   }
 }
 
 variable "full_node_ec2" {
-  description = "Configuration of the full node EC2 instance"
-  type = map(any)
-  default = {
+  description     = "Configuration of the full node EC2 instance"
+  type            = map(any)
+  default         = {
     instance_type = "t2.micro"
-    count = 1
+    count         = 1
   }
 }
 
 variable "rdx_public_subnet_cidr_blocks" {
   description = "Avalible CIRD blocks for RDX public subnets"
-  type = list(string)
-  default = [ "10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24", "10.0.4.0/24" ]
+  type        = list(string)
+  default     = [ "10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24", "10.0.4.0/24" ]
 }
 
 variable "rdx_private_subnet_cidr_blocks" {
   description = "Avalible CIRD blocks for RDX private subnets"
-  type = list(string)
-  default = [ "10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24", "10.0.104.0/24" ]
+  type        = list(string)
+  default     = [ "10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24", "10.0.104.0/24" ]
 }
 
 variable "public_security_group_rules_ingress" {
@@ -46,7 +46,7 @@ variable "public_security_group_rules_ingress" {
       cidr_block  = string
       description = string
     }))
-    default     = [
+    default = [
         {
           from_port   = 443
           to_port     = 443
@@ -72,7 +72,7 @@ variable "public_security_group_rules_egress" {
       cidr_block  = string
       description = string
     }))
-    default     = [
+    default = [
         {
           from_port   = 0
           to_port     = 0
@@ -91,7 +91,7 @@ variable "private_security_group_rules" {
       protocol    = string
       description = string
     }))
-    default     = [
+    default = [
         {
           from_port   = 443
           to_port     = 443
