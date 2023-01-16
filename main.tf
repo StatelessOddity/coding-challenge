@@ -71,7 +71,6 @@ resource "aws_security_group" "rdx_public_security_group" {
 
 resource "aws_security_group_rule" "rdx_public_security_group_rules" {
   count = length(var.public_security_group_rules)
-
   type              = "ingress"
   from_port         = var.public_security_group_rules[count.index].from_port
   to_port           = var.public_security_group_rules[count.index].to_port
@@ -90,7 +89,7 @@ resource "aws_security_group" "rdx_private_security_group" {
     description = "Allow PostgreSQL traffic fom Node and Gateway"
     from_port = 5432
     protocol = "tcp"
-    security_groups = [ aws_security_group.rdx_public_security_group ]
+    security_groups = [aws_security_group.rdx_public_security_group]
     to_port = 5432
   } ]
 }
@@ -115,6 +114,10 @@ data "aws_ami" "ubuntu" {
   }
 
   owners = ["099720109477"]
+}
+
+data "aws_avalibility_zones" "avalible" {
+  state = "avalible"
 }
 
 resource "aws_instance" "full_node_ec2" {
