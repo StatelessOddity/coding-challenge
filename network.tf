@@ -19,7 +19,7 @@ resource "aws_subnet" "rdx_public_subnet" {
   cidr_block = var.rdx_public_subnet_cidr_blocks[count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
   tags = {
-    Name = "RDX public subnet $(count.index)"
+    Name = "RDX_public_subnet_$(count.index)"
   }
 }
 
@@ -29,7 +29,7 @@ resource "aws_subnet" "rdx_private_subnet" {
   cidr_block = var.rdx_private_subnet_cidr_blocks[count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
   tags = {
-    Name = "RDX private sunet $(count.index)"
+    Name = "RDX_private_subnet_$(count.index)"
   }
 }
 
