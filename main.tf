@@ -2,7 +2,7 @@
 This setup is pretty straightforward, I'm not creating any custom modules.
 My goal was to prepare something similar to how production setup MIGHT look like for the client.
 Of course I skipped redundancy and scaled it down/simplified to save costs :)
-*/
+
 
 data "aws_availability_zones" "available" {
   state = "available"
@@ -108,23 +108,6 @@ resource "aws_db_subnet_group" "rdx_private_subnet_group" {
   subnet_ids = [for subnet in aws_subnet.rdx_private_subnet : subnet.id]
 }
 
-data "aws_ami" "ubuntu" {
-
-    most_recent = true
-
-    filter {
-        name   = "name"
-        values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-    }
-
-    filter {
-        name = "virtualization-type"
-        values = ["hvm"]
-    }
-
-    owners = ["099720109477"]
-}
-
 resource "aws_instance" "full_node_ec2" {
   count = var.full_node_ec2.count
   ami = data.aws_ami.ubuntu.id
@@ -136,3 +119,5 @@ resource "aws_instance" "full_node_ec2" {
     Name = "RDX Full Node ${count.index}"
   }
 }
+
+*/
