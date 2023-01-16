@@ -13,9 +13,6 @@ resource "aws_security_group_rule" "rdx_public_security_group_rules_ingress" {
   cidr_blocks       = [var.public_security_group_rules_ingress[count.index].cidr_block]
   description       = var.public_security_group_rules_ingress[count.index].description
   security_group_id = aws_security_group.rdx_public_security_group.id
-  tags              = {
-    Name            = "${var.public_security_group_rules_ingress[count.index].name}"
-  }
 }
 
 resource "aws_security_group_rule" "rdx_public_security_group_rules_egress" {
@@ -27,9 +24,6 @@ resource "aws_security_group_rule" "rdx_public_security_group_rules_egress" {
   cidr_blocks       = [var.public_security_group_rules_egress[count.index].cidr_block]
   description       = var.public_security_group_rules_egress[count.index].description
   security_group_id = aws_security_group.rdx_public_security_group.id
-  tags              = {
-    Name            = "${var.public_security_group_rules_egress[count.index].name}"
-  }
 }
 
 resource "aws_security_group" "rdx_private_security_group" {

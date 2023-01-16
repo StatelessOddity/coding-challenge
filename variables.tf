@@ -40,7 +40,6 @@ variable "rdx_private_subnet_cidr_blocks" {
 
 variable "public_security_group_rules_ingress" {
     type = list(object({
-      name        = string
       from_port   = number
       to_port     = number
       protocol    = string
@@ -49,7 +48,6 @@ variable "public_security_group_rules_ingress" {
     }))
     default     = [
         {
-          name        = "HTTPS traffic"
           from_port   = 443
           to_port     = 443
           protocol    = "tcp"
@@ -57,7 +55,6 @@ variable "public_security_group_rules_ingress" {
           description = "Allow HTTPS traffic"
         },
         {
-          name        = "Allow port 30000"
           from_port   = 30000
           to_port     = 30000
           protocol    = "tcp"
@@ -69,7 +66,6 @@ variable "public_security_group_rules_ingress" {
 
 variable "public_security_group_rules_egress" {
     type = list(object({
-      name        = string
       from_port   = number
       to_port     = number
       protocol    = string
@@ -78,7 +74,6 @@ variable "public_security_group_rules_egress" {
     }))
     default     = [
         {
-          name        = "Allow outbound"
           from_port   = 0
           to_port     = 0
           protocol    = "-1"
