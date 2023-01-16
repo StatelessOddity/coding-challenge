@@ -19,7 +19,7 @@ resource "aws_subnet" "rdx_public_subnet" {
   cidr_block = var.rdx_public_subnet_cidr_blocks[count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
   tags = {
-    Name = "RDX_public_subnet_$(count.index)"
+    Name = "RDX public subnet"
   }
 }
 
@@ -29,7 +29,7 @@ resource "aws_subnet" "rdx_private_subnet" {
   cidr_block = var.rdx_private_subnet_cidr_blocks[count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
   tags = {
-    Name = "RDX_private_subnet_$(count.index)"
+    Name = "RDX private subnet"
   }
 }
 
@@ -38,6 +38,9 @@ resource "aws_route_table" "rdx_public_route_table" {
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.rdx_internet_gateway.id
+  }
+  tags = {
+    Name = "RDX public route table"
   }
 }
 
@@ -49,6 +52,9 @@ resource "aws_route_table_association" "public" {
 
 resource "aws_route_table" "rdx_private_route_table" {
   vpc_id = aws_vpc.rdx_vpc.id
+  tags = {
+    Name = "RDX private route table"
+  }
 }
 
 resource "aws_route_table_association" "private" {
