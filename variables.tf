@@ -18,6 +18,7 @@ variable "rdx_vpc_subnet_count" {
 }
 
 variable "full_node_ec2" {
+  count = 1
   description = "Configuration of the full node EC2 instance"
   type = map(any)
   default = {
