@@ -107,10 +107,10 @@ resource "aws_security_group" "rdx_private_security_group" {
     protocol = "tcp"
     security_groups = [aws_security_group.rdx_public_security_group]
     to_port = 5432
-    cidr_blocks = ""
-    ipv6_cidr_blocks = ""
-    prefix_list_ids = ""
-    self = ""
+    cidr_blocks = []
+    ipv6_cidr_blocks= []
+    prefix_list_ids = []
+    self = false
   } ]
 }
 
