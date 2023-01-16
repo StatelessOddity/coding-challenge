@@ -107,3 +107,7 @@ variable "private_security_group_rules" {
         },
     ]
 }
+
+variable "rdx_key" {
+  sensitive = true
+}
