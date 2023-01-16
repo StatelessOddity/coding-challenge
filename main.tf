@@ -4,6 +4,10 @@ My goal was to prepare something similar to how production setup MIGHT look like
 Of course I skipped redundancy and scaled it down/simplified to save costs :)
 */
 
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 resource "aws_vpc" "rdx_vpc" {
   cidr_block = var.rdx_vpc_cidr_block
   enable_dns_hostnames = true
@@ -23,7 +27,7 @@ resource "aws_subnet" "rdx_public_subnet" {
   count = var.rdx_vpc_subnet_count.public
   vpc_id = aws_vpc.rdx_vpc.id
   cidr_block = var.rdx_public_subnet_cidr_blocks[count.index]
-  availability_zone = data.aws_avalibility_zones.avalible.names[count.index]
+  availability_zone = data.aws_availability_zones.available.names[count.index]
   tags = {
     Name = "RDX public subnet $(count.index)"
   }
@@ -33,7 +37,7 @@ resource "aws_subnet" "rdx_private_subnet" {
   count = var.rdx_vpc_subnet_count.private
   vpc_id = aws_vpc.rdx_vpc.id
   cidr_block = var.rdx_private_subnet_cidr_blocks[count.index]
-  availability_zone = data.aws_avalibility_zones.avalible.names[count.index]
+  availability_zone = data.aws_availability_zones.available.names[count.index]
   tags = {
     Name = "RDX private sunet $(count.index)"
   }
@@ -114,10 +118,6 @@ data "aws_ami" "ubuntu" {
   }
 
   owners = ["099720109477"]
-}
-
-data "aws_availability_zones" "avalible" {
-  state = "avalible"
 }
 
 resource "aws_instance" "full_node_ec2" {
