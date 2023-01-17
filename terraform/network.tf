@@ -69,7 +69,7 @@ resource "aws_db_subnet_group" "rdx_private_subnet_group" {
   subnet_ids = [for subnet in aws_subnet.rdx_private_subnet : subnet.id]
 }
 
-resource "aws_eip" "fullnode_ips" {
+resource "aws_eip" "fullnode_ip" {
   count = var.full_node_ec2.count
   instance = aws_instance.full_node_ec2[count.index].id
   vpc = true
