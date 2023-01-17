@@ -26,6 +26,24 @@ variable "full_node_ec2" {
   }
 }
 
+variable "data_aggregator_ec2" {
+  description     = "Configuration of the data aggregator EC2 instance"
+  type            = map(any)
+  default         = {
+    instance_type = "t3.micro"
+    count         = 1
+  }
+}
+
+variable "gateway_api_ec2" {
+  description     = "Configuration of the Network Gateway EC2 instance"
+  type            = map(any)
+  default         = {
+    instance_type = "t3.micro"
+    count         = 1
+  }
+}
+
 variable "rdx_public_subnet_cidr_blocks" {
   description = "Avalible CIRD blocks for RDX public subnets"
   type        = list(string)
