@@ -71,15 +71,13 @@ jobs:
         run: terraform validate -no-color
 
       - name: Terraform Plan
-        if: steps.filter.outputs.terraform == 'true'
+        if: ${{ (steps.filter.outputs.terraform == 'true') && (github.event_name == 'pull_request') }}
         id: plan
         run: terraform plan -no-color
-        if: github.event_name == 'pull_request'
         continue-on-error: true
 
       - uses: actions/github-script@v6
-        if: steps.filter.outputs.terraform == 'true'
-        if: github.event_name == 'pull_request'
+        if: ${{ (steps.filter.outputs.terraform == 'true') && (github.event_name == 'pull_request') }}
         env:
           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
@@ -106,6 +104,5 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        if: steps.filter.outputs.terraform == 'true'
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: ${{ (steps.filter.outputs.terraform == 'true') && (github.event_name == 'pull_request') && (github.ref == 'refs/heads/main') && (github.event_name == 'push') }}
         run: terraform apply -auto-approve -input=false
