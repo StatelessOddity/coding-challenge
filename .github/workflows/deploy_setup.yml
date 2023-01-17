@@ -28,16 +28,18 @@ jobs:
         working-directory: ./terraform
 
     steps:
-      with:
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+           filters: |
+              terraform:
+                - 'terraform/**'
+
       - name: Repository Checkout
         uses: actions/checkout@v3
-        filters: |
-          terraform_files:
-            - './terraform/**' 
 
       - name: Setup AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
-        if: steps.filter.outputs.terraform == 'true'
         with:
           role-to-assume: ${{ secrets.AWS_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
