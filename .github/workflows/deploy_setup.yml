@@ -29,13 +29,11 @@ jobs:
 
     steps:
       with:
+      - name: Repository Checkout
+        uses: actions/checkout@v3
         filters: |
           terraform_files:
             - './terraform/**' 
-
-      - name: Repository Checkout
-        uses: actions/checkout@v3
-        if: steps.filter.outputs.terraform == 'true'
 
       - name: Setup AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
