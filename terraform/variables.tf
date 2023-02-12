@@ -127,7 +127,12 @@ variable "private_security_group_rules" {
 }
 
 # Public key for accessing EC2s
-variable "rdx_key" {
+variable "rdx_public_key" {
+  sensitive = true
+}
+
+# Public key for accessing EC2s
+variable "rdx_private_key" {
   sensitive = true
 }
 

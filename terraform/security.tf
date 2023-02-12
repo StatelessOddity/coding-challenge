@@ -45,5 +45,5 @@ resource "aws_security_group_rule" "rdx_private_security_group_rules" {
 
 resource "aws_key_pair" "rdx_key" {
   key_name   = "rdx-key"
-  public_key = var.rdx_key
+  public_key = var.rdx_public_key
 }

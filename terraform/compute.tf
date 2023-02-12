@@ -8,4 +8,11 @@ resource "aws_instance" "full_node_ec2" {
   tags = {
     Name = "Full Node ${count.index + 1}"
   }
+    connection {
+      type        = "ssh"
+      host        = self.public_ip
+      user        = "ubuntu"
+      private_key = var.rdx_private_key
+      timeout     = "4m"
+   }
 }
