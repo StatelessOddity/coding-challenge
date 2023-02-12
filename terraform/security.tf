@@ -1,11 +1,11 @@
 resource "aws_security_group" "rdx_public_security_group" {
-  name          = "rdx_public_security_group"
-  description   = "Security for compute EC2 instances of Full Node, Gateway and monitoring"
-  vpc_id        = aws_vpc.rdx_vpc.id
+  name        = "rdx_public_security_group"
+  description = "Security for compute EC2 instances of Full Node, Gateway and monitoring"
+  vpc_id      = aws_vpc.rdx_vpc.id
 }
 
 resource "aws_security_group_rule" "rdx_public_security_group_rules_ingress" {
-  count = length(var.public_security_group_rules_ingress)
+  count             = length(var.public_security_group_rules_ingress)
   type              = "ingress"
   from_port         = var.public_security_group_rules_ingress[count.index].from_port
   to_port           = var.public_security_group_rules_ingress[count.index].to_port
@@ -16,7 +16,7 @@ resource "aws_security_group_rule" "rdx_public_security_group_rules_ingress" {
 }
 
 resource "aws_security_group_rule" "rdx_public_security_group_rules_egress" {
-  count = length(var.public_security_group_rules_egress)
+  count             = length(var.public_security_group_rules_egress)
   type              = "egress"
   from_port         = var.public_security_group_rules_egress[count.index].from_port
   to_port           = var.public_security_group_rules_egress[count.index].to_port
@@ -27,9 +27,9 @@ resource "aws_security_group_rule" "rdx_public_security_group_rules_egress" {
 }
 
 resource "aws_security_group" "rdx_private_security_group" {
-  name          = "rdx_private_security_group"
-  description   = "security group for the Gateway API PostgreSQL Database"
-  vpc_id        = aws_vpc.rdx_vpc.id
+  name        = "rdx_private_security_group"
+  description = "security group for the Gateway API PostgreSQL Database"
+  vpc_id      = aws_vpc.rdx_vpc.id
 }
 
 resource "aws_security_group_rule" "rdx_private_security_group_rules" {
