@@ -77,3 +77,21 @@ resource "aws_eip" "fullnode_ip" {
     "Name" = "Full Node IP ${count.index + 1}"
   }
 }
+
+resource "aws_eip" "data_aggregator_ip" {
+  count    = var.data_aggregator_ec2.count
+  instance = aws_instance.data_aggregator_ec2[count.index].id
+  vpc      = true
+  tags = {
+    "Name" = "Data Aggregator ${count.index + 1}"
+  }
+}
+
+resource "aws_eip" "gateway_api_ip" {
+  count    = var.gateway_api_ec2.count
+  instance = aws_instance.gateway_api_ec2[count.index].id
+  vpc      = true
+  tags = {
+    "Name" = "Gateway API IP ${count.index + 1}"
+  }
+}

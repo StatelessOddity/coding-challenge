@@ -1,4 +1,4 @@
-resource "github_actions_secret" "example_secret" {
+resource "github_actions_secret" "fullnode_external_ip" {
   count           = var.full_node_ec2.count
   repository      = "coding-challenge"
   secret_name     = "IP"
