@@ -15,7 +15,8 @@ env:
 
   TF_LOG: INFO
   AWS_REGION: ${{ secrets.AWS_REGION }}
-  TF_VAR_rdx_key: ${{ secrets.RDX_KEY }}
+  TF_VAR_rdx_public_key: ${{ secrets.RDX_PUBLIC_KEY }}
+  TF_VAR_rdx_private_key: ${{ secrets.RDX_PRIVATE_KEY }}
   TF_VAR_token_github: ${{ secrets.TOKEN_GITHUB }}
 
 jobs:
