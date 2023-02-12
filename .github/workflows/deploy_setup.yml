@@ -20,7 +20,26 @@ env:
 
 jobs:
 
+  check_changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      terraform: ${{ steps.filter.outputs.terraform }}
+      ansible: ${{ steps.filter.outputs.ansible }}
+    steps:
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          terraform:
+            - 'terraform/**'
+          ansible:
+            - 'ansible/**'  
+
   infra_setup:
+    needs: check_changes
+    if: ${{ needs.check_changes.outputs.terraform == 'true' }}
     runs-on: ubuntu-latest
     defaults:
       run:
