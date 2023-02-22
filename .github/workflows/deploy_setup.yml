@@ -15,6 +15,7 @@ env:
   TF_VAR_rdx_public_key: ${{ secrets.RDX_PUBLIC_KEY }}
   TF_VAR_rdx_private_key: ${{ secrets.RDX_PRIVATE_KEY }}
   TF_VAR_token_github: ${{ secrets.TOKEN_GITHUB }}
+  ANSIBLE_HOST_KEY_CHECKING: False
 jobs:
   check_changes:
     runs-on: ubuntu-latest
@@ -101,11 +102,6 @@ jobs:
       - name: Terraform Apply
         if: ${{ (github.ref == 'refs/heads/main') && (github.event_name == 'push') }}
         run: terraform apply -auto-approve -input=false
-      - name: write inventory to file
-        env:
-          TEST_INVENTORY: ${{ secrets.ANSIBLE_INVENTORY }}
-        run: |
-          echo $ANSIBLE_INVENTORY
   servers_configuration:
     needs: [check_changes, infra_setup]
     if: ${{ needs.check_changes.outputs.ansible == 'true' }}
