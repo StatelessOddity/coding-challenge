@@ -130,6 +130,7 @@ jobs:
         run: |
           echo $ANSIBLE_INVENTORY
           echo "$ANSIBLE_INVENTORY" > inventory
+          cat inventory
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
