@@ -21,9 +21,9 @@ data "aws_availability_zones" "available" {
 
 data "template_file" "ansible_inventory" {
   template = "${file("./templates/hosts.tpl")}"
-    vars = {
-      fullnode_ips        = "${join("\n", aws_eip.fullnode_ip.*.public_ip)}"
-      data_aggregator_ips = "${join("\n", aws_eip.data_aggregator_ip.*.public_ip)}"
-      gateway_api_ips     = "${join("\n", aws_eip.gateway_api_ip.*.public_ip)}"
-    }
+  vars = {
+    fullnode_ips        = "${join("\n", aws_eip.fullnode_ip.*.public_ip)}"
+    data_aggregator_ips = "${join("\n", aws_eip.data_aggregator_ip.*.public_ip)}"
+    gateway_api_ips     = "${join("\n", aws_eip.gateway_api_ip.*.public_ip)}"
+  }
 }
