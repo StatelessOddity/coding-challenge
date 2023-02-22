@@ -1,0 +1,40 @@
+---
+- name: Install packages and configure Docker
+  hosts: all
+  become: yes
+  
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install wget, docker, docker-compose, and rng-tools
+      apt:
+        name:
+          - wget
+          - docker.io
+          - docker-compose
+          - rng-tools
+        state: present
+
+    - name: Start rngd service
+      service:
+        name: rng-tools
+        state: started
+
+    - name: Apply sudo rngd -r /dev/random command
+      command: sudo rngd -r /dev/random
+
+    - name: Create docker group
+      group:
+        name: docker
+        state: present
+
+    - name: Add current user to docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+
+    - name: Apply newgrp docker command
+      command: newgrp docker
