@@ -10,7 +10,7 @@ output "gateway_api_ec2_public_ips" {
   value = ["${aws_eip.gateway_api_ip.*.public_ip}"]
 }
 
-# Inventory:
+# Inventory
 
 output "ansible_inventory" {
   value = data.template_file.ansible_inventory.rendered
