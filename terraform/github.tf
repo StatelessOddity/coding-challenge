@@ -8,5 +8,5 @@ resource "github_actions_secret" "fullnode_external_ip" {
 resource "github_actions_secret" "ansible_inventory" {
   repository      = "coding-challenge"
   secret_name     = "ANSIBLE_INVENTORY"
-  plaintext_value = data.template_file.ansible_inventory.rendered
+  plaintext_value = output.ansible_inventory
 }
