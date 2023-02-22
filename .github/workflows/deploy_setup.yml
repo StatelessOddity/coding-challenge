@@ -120,9 +120,9 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           if [ -f test-requirements.txt ]; then pip install -r test-requirements.txt; fi
       - name: write inventory to file
-          env:
-            INVENTORY: ${{ secrets.ANSIBLE_INVENTORY }}
-          run: 'echo "$INVENTORY" > inventory'
+        env:
+          INVENTORY: ${{ secrets.ANSIBLE_INVENTORY }}
+        run: 'echo "$INVENTORY" > inventory'
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
