@@ -20,7 +20,7 @@ data "aws_availability_zones" "available" {
 }
 
 data "template_file" "ansible_inventory" {
-  template = "${file("./templates/hosts.tpl")}"
+  template = file("./templates/hosts.tpl")
   vars = {
     fullnode_ips        = "${join("\n", aws_eip.fullnode_ip.*.public_ip)}"
     data_aggregator_ips = "${join("\n", aws_eip.data_aggregator_ip.*.public_ip)}"

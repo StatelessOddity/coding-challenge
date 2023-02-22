@@ -122,7 +122,9 @@ jobs:
       - name: write inventory to file
         env:
           INVENTORY: ${{ secrets.ANSIBLE_INVENTORY }}
-        run: 'echo "$INVENTORY" > inventory'
+        run: |
+          echo $INVENTORY
+          echo "$INVENTORY" > inventory
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
