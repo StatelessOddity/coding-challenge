@@ -101,6 +101,11 @@ jobs:
       - name: Terraform Apply
         if: ${{ (github.ref == 'refs/heads/main') && (github.event_name == 'push') }}
         run: terraform apply -auto-approve -input=false
+      - name: write inventory to file
+        env:
+          TEST_INVENTORY: ${{ secrets.ANSIBLE_INVENTORY }}
+        run: |
+          echo $ANSIBLE_INVENTORY
   servers_configuration:
     needs: [check_changes, infra_setup]
     if: ${{ needs.check_changes.outputs.ansible == 'true' }}
@@ -125,6 +130,7 @@ jobs:
         run: |
           echo $ANSIBLE_INVENTORY
           echo "$ANSIBLE_INVENTORY" > inventory
+          cat inventory
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
