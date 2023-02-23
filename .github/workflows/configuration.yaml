@@ -3,6 +3,7 @@ on:
   workflow_run:
     workflows:
       - Deploy Infrastructure
+    branches: [dev]
     types:
       - completed
   workflow_dispatch:
