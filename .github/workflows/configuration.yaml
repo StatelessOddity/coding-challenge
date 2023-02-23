@@ -1,0 +1,66 @@
+name: "Configure Servers"
+on:
+  workflow_run:
+    workflows:
+      - Deploy Setup
+    types:
+      - completed
+  workflow_dispatch:
+permissions:
+    id-token: write
+    contents: read
+    pull-requests: write
+env:
+  ANSIBLE_HOST_KEY_CHECKING: False
+jobs:
+  check_changes:
+    name: Check Changes
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      ansible: ${{ steps.filter.outputs.ansible }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          ansible:
+            - 'ansible/**'
+  servers_configuration:
+    name: Run Ansible
+    needs: check_changes
+    if: ${{ (needs.check_changes.outputs.ansible == 'true') && (github.ref == 'refs/heads/main') && (github.event_name == 'push') }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ansible
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install Ansible
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f test-requirements.txt ]; then pip install -r test-requirements.txt; fi
+      - name: write inventory to file
+        env:
+          ANSIBLE_INVENTORY: ${{ secrets.ANSIBLE_INVENTORY }}
+        run: |
+          echo $ANSIBLE_INVENTORY
+          echo "$ANSIBLE_INVENTORY" > inventory
+          cat inventory
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.RDX_PRIVATE_KEY }}
+          name: id_rsa # optional
+          known_hosts: unnecessary
+          if_key_exists: fail
+      - name: run playbook
+        run: |
+          ansible-playbook -i inventory rdx-stack.yaml -u ubuntu
