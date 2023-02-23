@@ -32,7 +32,7 @@ jobs:
   servers_configuration:
     name: Run Ansible
     needs: check_changes
-    if: ${{ (needs.check_changes.outputs.ansible == 'true') && (github.ref == 'refs/heads/main') && (github.event_name == 'push') }}
+    if: ${{ (needs.check_changes.outputs.ansible == 'true') && (github.event_name == 'push') }}
     runs-on: ubuntu-latest
     defaults:
       run:
