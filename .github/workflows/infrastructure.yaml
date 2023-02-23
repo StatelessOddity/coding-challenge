@@ -12,6 +12,7 @@ env:
   TF_VAR_rdx_public_key: ${{ secrets.RDX_PUBLIC_KEY }}
   TF_VAR_rdx_private_key: ${{ secrets.RDX_PRIVATE_KEY }}
   TF_VAR_token_github: ${{ secrets.TOKEN_GITHUB }}
+  ANSIBLE_HOST_KEY_CHECKING: False
 jobs:
   check_changes:
     name: Check Changes
@@ -20,6 +21,7 @@ jobs:
       pull-requests: read
     outputs:
       terraform: ${{ steps.filter.outputs.terraform }}
+      ansible: ${{ steps.filter.outputs.ansible }}
     steps:
     - uses: actions/checkout@v3
     - uses: dorny/paths-filter@v2
@@ -28,6 +30,8 @@ jobs:
         filters: |
           terraform:
             - 'terraform/**'
+          ansible:
+            - 'ansible/**'
   infra_setup:
     name: Run Terraform
     needs: check_changes
@@ -66,3 +70,39 @@ jobs:
       - name: Apply Terraform
         if: ${{ (github.ref == 'refs/heads/main') && (github.event_name == 'push') }}
         run: terraform apply -auto-approve -input=false
+  servers_configuration:
+    name: Run Ansible
+    needs: check_changes
+    if: ${{ needs.check_changes.outputs.ansible == 'true' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ansible
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install Ansible
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f test-requirements.txt ]; then pip install -r test-requirements.txt; fi
+      - name: write inventory to file
+        env:
+          ANSIBLE_INVENTORY: ${{ secrets.ANSIBLE_INVENTORY }}
+        run: |
+          echo $ANSIBLE_INVENTORY
+          echo "$ANSIBLE_INVENTORY" > inventory
+          cat inventory
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.RDX_PRIVATE_KEY }}
+          name: id_rsa
+          known_hosts: unnecessary # Figure out how to generate this with TF
+          if_key_exists: fail
+      - name: run playbook
+        run: |
+          ansible-playbook -i inventory rdx-stack.yaml -u ubuntu
