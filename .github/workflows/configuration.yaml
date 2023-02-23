@@ -2,7 +2,7 @@ name: "Configure Servers"
 on:
   workflow_run:
     workflows:
-      - Deploy Setup
+      - Deploy Infrastructure
     types:
       - completed
   workflow_dispatch:
