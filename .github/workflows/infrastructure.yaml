@@ -33,7 +33,7 @@ jobs:
           ansible:
             - 'ansible/**'
   infra_setup:
-    name: Run Terraform
+    name: Deploy Infrastructure
     needs: check_changes
     if: ${{ needs.check_changes.outputs.terraform == 'true' }}
     runs-on: ubuntu-latest
@@ -71,7 +71,7 @@ jobs:
         if: ${{ (github.ref == 'refs/heads/main') && (github.event_name == 'push') }}
         run: terraform apply -auto-approve -input=false
   servers_configuration:
-    name: Run Ansible
+    name: Deploy Servers Configuration
     needs: [check_changes, infra_setup]
     if: ${{ needs.check_changes.outputs.ansible == 'true' }}
     runs-on: ubuntu-latest
@@ -80,7 +80,7 @@ jobs:
         working-directory: ./ansible
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.9
+      - name: Install Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
@@ -89,20 +89,20 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           if [ -f test-requirements.txt ]; then pip install -r test-requirements.txt; fi
-      - name: write inventory to file
+      - name: Create inventory
         env:
           ANSIBLE_INVENTORY: ${{ secrets.ANSIBLE_INVENTORY }}
         run: |
           echo $ANSIBLE_INVENTORY
           echo "$ANSIBLE_INVENTORY" > inventory
           cat inventory
-      - name: Install SSH key
+      - name: Install private SSH key
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.RDX_PRIVATE_KEY }}
           name: id_rsa
           known_hosts: unnecessary # Figure out how to generate this with TF
           if_key_exists: fail
-      - name: run playbook
+      - name: Deploy servers configuration
         run: |
           ansible-playbook -i inventory rdx-stack.yaml -u ubuntu
