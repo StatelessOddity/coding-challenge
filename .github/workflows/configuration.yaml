@@ -3,7 +3,6 @@ on:
   workflow_run:
     workflows:
       - Deploy Infrastructure
-    branches: [dev]
     types:
       - completed
   workflow_dispatch:
@@ -32,7 +31,7 @@ jobs:
   servers_configuration:
     name: Run Ansible
     needs: check_changes
-    if: ${{ (needs.check_changes.outputs.ansible == 'true') && (github.ref == 'refs/heads/main') }}
+    if: ${{ needs.check_changes.outputs.ansible == 'true' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -59,8 +58,8 @@ jobs:
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.RDX_PRIVATE_KEY }}
-          name: id_rsa # optional
-          known_hosts: unnecessary
+          name: id_rsa
+          known_hosts: unnecessary # Figure out how to generate this with TF
           if_key_exists: fail
       - name: run playbook
         run: |
