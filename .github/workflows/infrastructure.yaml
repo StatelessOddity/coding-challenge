@@ -1,29 +1,26 @@
-name: "Deploy Setup"
+name: "Deploy Infrastructure"
 on:
   push:
     branches:
       - main
       - dev
-  workflow_dispatch:
 permissions:
       id-token: write
       contents: read
-      pull-requests: write
 env:
   TF_LOG: INFO
   AWS_REGION: ${{ secrets.AWS_REGION }}
   TF_VAR_rdx_public_key: ${{ secrets.RDX_PUBLIC_KEY }}
   TF_VAR_rdx_private_key: ${{ secrets.RDX_PRIVATE_KEY }}
   TF_VAR_token_github: ${{ secrets.TOKEN_GITHUB }}
-  ANSIBLE_HOST_KEY_CHECKING: False
 jobs:
   check_changes:
+    name: Check Changes
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
     outputs:
       terraform: ${{ steps.filter.outputs.terraform }}
-      ansible: ${{ steps.filter.outputs.ansible }}
     steps:
     - uses: actions/checkout@v3
     - uses: dorny/paths-filter@v2
@@ -32,9 +29,8 @@ jobs:
         filters: |
           terraform:
             - 'terraform/**'
-          ansible:
-            - 'ansible/**'
   infra_setup:
+    name: Run Terraform
     needs: check_changes
     if: ${{ needs.check_changes.outputs.terraform == 'true' }}
     runs-on: ubuntu-latest
@@ -43,7 +39,7 @@ jobs:
         shell: bash
         working-directory: ./terraform
     steps:
-      - name: Repository Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v3
       - name: Setup AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -51,65 +47,30 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
           role-session-name: GitHub-OIDC-TERRAFORM
-      - name: Setup Terraform
+      - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.3.7
-      - name: Terraform fmt
+      - name: Check Formatting
         id: fmt
         run: terraform fmt -check
         continue-on-error: true
-      - name: Terraform Initialization
+      - name: Initialize Terraform
         id: init
         env:
           AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
           AWS_BUCKET_KEY_NAME: ${{ secrets.AWS_BUCKET_KEY_NAME }}
         run: terraform init -backend-config="bucket=${AWS_BUCKET_NAME}" -backend-config="key=${AWS_BUCKET_KEY_NAME}" -backend-config="region=${AWS_REGION}"
-      - name: Terraform Validation
+      - name: Validate Terraform Code
         id: validate
         run: terraform validate -no-color
-      - name: Terraform Plan
+      - name: Run Terraform Plan
         id: plan
         run: terraform plan -no-color
         continue-on-error: true
-      - name: Terraform Plan Status
+      - name: Check Terraform Plan
         if: steps.plan.outcome == 'failure'
         run: exit 1
-      - name: Terraform Apply
+      - name: Apply Terraform
         if: ${{ (github.ref == 'refs/heads/main') && (github.event_name == 'push') }}
         run: terraform apply -auto-approve -input=false
-  servers_configuration:
-    needs: [check_changes, infra_setup]
-    if: ${{ (needs.check_changes.outputs.ansible == 'true') && (github.ref == 'refs/heads/main') && (github.event_name == 'push') }}
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./ansible
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      - name: Install Ansible
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          if [ -f test-requirements.txt ]; then pip install -r test-requirements.txt; fi
-      - name: write inventory to file
-        env:
-          ANSIBLE_INVENTORY: ${{ secrets.ANSIBLE_INVENTORY_MAN }}
-        run: |
-          echo $ANSIBLE_INVENTORY
-          echo "$ANSIBLE_INVENTORY" > inventory
-          cat inventory
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.RDX_PRIVATE_KEY }}
-          name: id_rsa # optional
-          known_hosts: unnecessary
-          if_key_exists: fail
-      - name: run playbook
-        run: |
-          ansible-playbook -i inventory rdx-stack.yaml -u ubuntu
