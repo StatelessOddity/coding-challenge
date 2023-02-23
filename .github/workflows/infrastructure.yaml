@@ -72,7 +72,7 @@ jobs:
         run: terraform apply -auto-approve -input=false
   servers_configuration:
     name: Run Ansible
-    needs: check_changes
+    needs: [check_changes, infra_setup]
     if: ${{ needs.check_changes.outputs.ansible == 'true' }}
     runs-on: ubuntu-latest
     defaults:
