@@ -78,6 +78,9 @@ jobs:
     needs: check_changes
     if: ${{ (needs.check_changes.outputs.ansible == 'true') && (github.ref == 'refs/heads/dev') && (github.event_name == 'push') }}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ansible
     steps:
       # Important: This sets up your GITHUB_WORKSPACE environment variable
       - uses: actions/checkout@v3
