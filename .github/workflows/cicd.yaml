@@ -165,4 +165,4 @@ jobs:
           if_key_exists: fail
       - name: Deploy servers configuration
         run: |
-          ansible-playbook -i inventory rdx-stack.yaml -u ubuntu
+          ansible-playbook -i hosts rdx-stack.yaml -u ubuntu
