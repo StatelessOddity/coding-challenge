@@ -87,6 +87,42 @@ jobs:
           fetch-depth: 0
       - name: Run ansible-lint
         uses: ansible/ansible-lint-action@main
+  raise_pr:
+    name: Raise Pull Request
+    runs-on: ubuntu-latest
+    needs: [test_infrastructure, test_configuration]
+    id: apr
+    if: | 
+      always()
+      && contains(needs.*.result, 'success')
+      && contains(github.event.head_commit.message, 'pr')
+      && !contains(needs.*.result, 'failure')
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.TOKEN_GITHUB }}
+          title: Automated PR
+          body: >
+            This PR is auto-generated
+            and I'm testing it
+          labels: Automated PR
+      - name: Approve Pull Request
+        uses: juliangruber/approve-pull-request-action@v2.0.0
+        if: contains(github.event.head_commit.message, 'pr-a')
+        with:
+          github-token: ${{ secrets.TOKEN_GITHUB }}
+          number: ${{ steps.apr.outputs.pull-request-number }}
+      - name: Merge Pull Request
+        uses: juliangruber/merge-pull-request-action@v1
+        if: contains(github.event.head_commit.message, 'pr-am')
+        with:
+          github-token: ${{ secrets.TOKEN_GITHUB }}
+          number: ${{ steps.apr.outputs.pull-request-number }}
+          method: squash
+  
+  
   infra_setup:
     name: Deploy Infrastructure
     needs: check_changes
