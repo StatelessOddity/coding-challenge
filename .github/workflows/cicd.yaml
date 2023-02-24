@@ -99,6 +99,7 @@ jobs:
       && contains(needs.*.result, 'success')
       && contains(github.event.head_commit.message, 'pr')
       && !contains(needs.*.result, 'failure')
+      && (github.ref == 'refs/heads/test')
     steps:
       - uses: actions/checkout@v3
       - name: pull-request
@@ -106,6 +107,7 @@ jobs:
         id: apr
         with:
           destination_branch: "main"
+          pr_label: automatic-pr
       - name: Approve Pull Request
         uses: juliangruber/approve-pull-request-action@v2.0.0
         if: contains(github.event.head_commit.message, 'pr-a')
