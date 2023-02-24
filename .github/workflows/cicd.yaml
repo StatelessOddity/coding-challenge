@@ -125,11 +125,13 @@ jobs:
       - name: Apply Terraform
         if: ${{ (github.ref == 'refs/heads/main') && (github.event_name == 'push') }}
         run: terraform apply -auto-approve -input=false
+      - name: List files
+          run: ls -R
       - uses: actions/upload-artifact@v3
         name: Upload Ansible inventory
         with:
           name: ansible-inventory
-          path: ./hosts
+          path: ./terraform/hosts
           if-no-files-found: error
   servers_configuration:
     name: Deploy Servers Configuration
