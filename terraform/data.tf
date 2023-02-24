@@ -29,6 +29,6 @@ data "template_file" "ansible_inventory" {
 }
 
 resource "local_file" "ansible_inventory" {
-  content  = "${data.template_file.ansible_inventory.rendered}"
+  content  = data.template_file.ansible_inventory.rendered
   filename = "inventory"
 }
