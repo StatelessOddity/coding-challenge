@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-      - test
+      - testing
 permissions:
       id-token: write
       contents: read
@@ -38,7 +38,7 @@ jobs:
   test_infrastructure:
     name: Test Infrastructure Code
     needs: check_changes
-    if: ${{ (needs.check_changes.outputs.terraform == 'true') && (github.ref == 'refs/heads/test') && (github.event_name == 'push') }}
+    if: ${{ (needs.check_changes.outputs.terraform == 'true') && (github.ref == 'refs/heads/testing') && (github.event_name == 'push') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -78,7 +78,7 @@ jobs:
   test_configuration:
     name: Test Configuration Code
     needs: check_changes
-    if: ${{ (needs.check_changes.outputs.ansible == 'true') && (github.ref == 'refs/heads/test') }}
+    if: ${{ (needs.check_changes.outputs.ansible == 'true') && (github.ref == 'refs/heads/testing') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -99,7 +99,7 @@ jobs:
       && contains(needs.*.result, 'success')
       && contains(github.event.head_commit.message, 'pr')
       && !contains(needs.*.result, 'failure')
-      && (github.ref == 'refs/heads/test')
+      && (github.ref == 'refs/heads/testing')
     steps:
       - uses: actions/checkout@v3
       - name: pull-request
