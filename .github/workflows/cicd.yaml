@@ -106,8 +106,8 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
-          branch: dev
-          base: main
+          branch: main
+          base: dev
           title: Automated PR
           body: >
             This PR is auto-generated
