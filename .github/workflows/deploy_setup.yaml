@@ -125,6 +125,12 @@ jobs:
       - name: Apply Terraform
         if: ${{ (github.ref == 'refs/heads/main') && (github.event_name == 'push') }}
         run: terraform apply -auto-approve -input=false
+      - uses: actions/upload-artifact@v3
+        name: Upload Ansible inventory
+        with:
+          name: ansible-inventory
+          path: inventory
+          if-no-files-found: error
   servers_configuration:
     name: Deploy Servers Configuration
     needs: [check_changes, infra_setup]
@@ -144,13 +150,10 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           if [ -f test-requirements.txt ]; then pip install -r test-requirements.txt; fi
-      - name: Create inventory
-        env:
-          ANSIBLE_INVENTORY: ${{ secrets.ANSIBLE_INVENTORY }}
-        run: |
-          echo $ANSIBLE_INVENTORY
-          echo "$ANSIBLE_INVENTORY" > inventory
-          cat inventory
+      - uses: actions/download-artifact@v3
+        name: Download Ansible inventory
+        with:
+          name: ansible-inventory
       - name: Install private SSH key
         uses: shimataro/ssh-key-action@v2
         with:

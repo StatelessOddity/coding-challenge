@@ -27,3 +27,8 @@ data "template_file" "ansible_inventory" {
     gateway_api_ips     = "${join("\n", aws_eip.gateway_api_ip.*.public_ip)}"
   }
 }
+
+resource "local_file" "ansible_inventory" {
+  content  = "${data.template_file.ansible_inventory.rendered}"
+  filename = "inventory"
+}
