@@ -34,7 +34,7 @@ jobs:
             - 'terraform/**'
           ansible:
             - 'ansible/**'
-  
+
   test_infrastructure:
     name: Test Infrastructure Code
     needs: check_changes
@@ -107,7 +107,6 @@ jobs:
         id: apr
         with:
           destination_branch: "main"
-          pr_label: automatic-pr
       - name: Approve Pull Request
         uses: juliangruber/approve-pull-request-action@v2.0.0
         if: contains(github.event.head_commit.message, 'pr-a')
