@@ -154,8 +154,8 @@ jobs:
           if [ -f test-requirements.txt ]; then pip install -r test-requirements.txt; fi
       - uses: actions/download-artifact@v3
         name: Download Ansible inventory
-        path: ./ansible
         with:
+          path: ./ansible
           name: ansible-inventory
       - name: Install private SSH key
         uses: shimataro/ssh-key-action@v2
