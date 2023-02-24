@@ -136,7 +136,7 @@ variable "rdx_private_key" {
   sensitive = true
 }
 
-# Personal Github tokens
+# Personal Github tokens:
 variable "token_github" {
   sensitive = true
 }
