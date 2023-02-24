@@ -74,7 +74,7 @@ jobs:
         run: terraform plan -no-color
         continue-on-error: false
   test_configuration:
-    name: Ansible Lint
+    name: Test Configuration Code
     needs: check_changes
     if: ${{ (needs.check_changes.outputs.ansible == 'true') && (github.ref == 'refs/heads/dev') && (github.event_name == 'push') }}
     runs-on: ubuntu-latest
@@ -82,17 +82,11 @@ jobs:
       run:
         working-directory: ./ansible
     steps:
-      # Important: This sets up your GITHUB_WORKSPACE environment variable
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0 # needed for progressive mode to work
-
+          fetch-depth: 0
       - name: Run ansible-lint
-        # replace `main` with any valid ref, or tags like `v6`
         uses: ansible/ansible-lint-action@main
-        # optional:
-        # with:
-        #   path: "playbooks/"  # <-- only one value is allowed
   infra_setup:
     name: Deploy Infrastructure
     needs: check_changes
@@ -162,7 +156,7 @@ jobs:
         with:
           key: ${{ secrets.RDX_PRIVATE_KEY }}
           name: id_rsa
-          known_hosts: unnecessary # Figure out how to generate this with TF
+          known_hosts: unnecessary # Figure out how to generate this for ec2s with TF, security101
           if_key_exists: fail
       - name: Deploy servers configuration
         run: |
