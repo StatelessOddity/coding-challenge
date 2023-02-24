@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-      - dev
+      - test
 permissions:
       id-token: write
       contents: read
@@ -38,7 +38,7 @@ jobs:
   test_infrastructure:
     name: Test Infrastructure Code
     needs: check_changes
-    if: ${{ (needs.check_changes.outputs.terraform == 'true') && (github.ref == 'refs/heads/dev') && (github.event_name == 'push') }}
+    if: ${{ (needs.check_changes.outputs.terraform == 'true') && (github.ref == 'refs/heads/test') && (github.event_name == 'push') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -78,7 +78,7 @@ jobs:
   test_configuration:
     name: Test Configuration Code
     needs: check_changes
-    if: ${{ (needs.check_changes.outputs.ansible == 'true') && (github.ref == 'refs/heads/dev') }}
+    if: ${{ (needs.check_changes.outputs.ansible == 'true') && (github.ref == 'refs/heads/test') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -100,31 +100,24 @@ jobs:
       && contains(github.event.head_commit.message, 'pr')
       && !contains(needs.*.result, 'failure')
     steps:
-      - uses: actions/checkout@v2
-      - name: Create Pull Request
+      - uses: actions/checkout@v3
+      - name: pull-request
+        uses: repo-sync/pull-request@v2
         id: apr
-        uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.TOKEN_GITHUB }}
-          branch: main
-          base: dev
-          title: Automated PR
-          body: >
-            This PR is auto-generated
-            and I'm testing it
-          labels: Automated PR
+          destination_branch: "main"
       - name: Approve Pull Request
         uses: juliangruber/approve-pull-request-action@v2.0.0
         if: contains(github.event.head_commit.message, 'pr-a')
         with:
           github-token: ${{ secrets.TOKEN_GITHUB }}
-          number: ${{ steps.apr.outputs.pull-request-number }}
+          number: ${{steps.apr.outputs.pr_number}}
       - name: Merge Pull Request
         uses: juliangruber/merge-pull-request-action@v1
         if: contains(github.event.head_commit.message, 'pr-am')
         with:
           github-token: ${{ secrets.TOKEN_GITHUB }}
-          number: ${{ steps.apr.outputs.pull-request-number }}
+          number: ${{steps.apr.outputs.pr_number}}
           method: squash
   
   infra_setup:
