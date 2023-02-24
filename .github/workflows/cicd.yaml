@@ -170,7 +170,7 @@ jobs:
           if-no-files-found: error
   
   servers_configuration:
-    name: Deploy Servers Configuration
+    name: Configuration
     needs: [check_changes, infra_setup]
     if: ${{ (needs.check_changes.outputs.ansible == 'true') && (github.ref == 'refs/heads/main') }}
     runs-on: ubuntu-latest
