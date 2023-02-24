@@ -76,7 +76,7 @@ jobs:
   test_configuration:
     name: Test Configuration Code
     needs: check_changes
-    if: ${{ (needs.check_changes.outputs.ansible == 'true') && (github.ref == 'refs/heads/dev') && (github.event_name == 'push') }}
+    if: ${{ (needs.check_changes.outputs.ansible == 'true') && (github.ref == 'refs/heads/dev') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -90,7 +90,7 @@ jobs:
   infra_setup:
     name: Deploy Infrastructure
     needs: check_changes
-    if: ${{ needs.check_changes.outputs.terraform == 'true' }}
+    if: ${{ (needs.check_changes.outputs.terraform == 'true') && (github.ref == 'refs/heads/main') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -128,7 +128,7 @@ jobs:
   servers_configuration:
     name: Deploy Servers Configuration
     needs: [check_changes, infra_setup]
-    if: ${{ needs.check_changes.outputs.ansible == 'true' }}
+    if: ${{ (needs.check_changes.outputs.ansible == 'true') && (github.ref == 'refs/heads/main') }}
     runs-on: ubuntu-latest
     defaults:
       run:
