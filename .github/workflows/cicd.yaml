@@ -129,7 +129,7 @@ jobs:
         name: Upload Ansible inventory
         with:
           name: ansible-inventory
-          path: ./inventory
+          path: ./hosts
           if-no-files-found: error
   servers_configuration:
     name: Deploy Servers Configuration
