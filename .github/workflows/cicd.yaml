@@ -126,7 +126,7 @@ jobs:
         if: ${{ (github.ref == 'refs/heads/main') && (github.event_name == 'push') }}
         run: terraform apply -auto-approve -input=false
       - name: List files
-          run: ls -R
+        run: ls -R
       - uses: actions/upload-artifact@v3
         name: Upload Ansible inventory
         with:
