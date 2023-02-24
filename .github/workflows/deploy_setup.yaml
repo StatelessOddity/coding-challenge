@@ -73,18 +73,22 @@ jobs:
         id: plan
         run: terraform plan -no-color
         continue-on-error: false
-  test_ansible:
-    name: Test Configuration Code
-    needs: check_changes
+  test_configuration:
+    name: Ansible Lint 
     if: ${{ (needs.check_changes.outputs.ansible == 'true') && (github.ref == 'refs/heads/dev') && (github.event_name == 'push') }}
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./ansible
     steps:
+      # Important: This sets up your GITHUB_WORKSPACE environment variable
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # needed for progressive mode to work
+
       - name: Run ansible-lint
-        uses: ansible-community/ansible-lint-action@v6.0.2
+        # replace `main` with any valid ref, or tags like `v6`
+        uses: ansible/ansible-lint-action@main
+        # optional:
+        # with:
+        #   path: "playbooks/"  # <-- only one value is allowed
   infra_setup:
     name: Deploy Infrastructure
     needs: check_changes
