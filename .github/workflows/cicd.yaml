@@ -34,6 +34,7 @@ jobs:
             - 'terraform/**'
           ansible:
             - 'ansible/**'
+  
   test_infrastructure:
     name: Test Infrastructure Code
     needs: check_changes
@@ -73,6 +74,7 @@ jobs:
         id: plan
         run: terraform plan -no-color
         continue-on-error: false
+  
   test_configuration:
     name: Test Configuration Code
     needs: check_changes
@@ -87,6 +89,7 @@ jobs:
           fetch-depth: 0
       - name: Run ansible-lint
         uses: ansible/ansible-lint-action@main
+  
   raise_pr:
     name: Raise Pull Request
     runs-on: ubuntu-latest
@@ -103,11 +106,14 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
+          branch: auto-pr-temp-branch
+          base: main
           title: Automated PR
           body: >
             This PR is auto-generated
             and I'm testing it
           labels: Automated PR
+          delete-branch: true
       - name: Approve Pull Request
         uses: juliangruber/approve-pull-request-action@v2.0.0
         if: contains(github.event.head_commit.message, 'pr-a')
@@ -122,11 +128,10 @@ jobs:
           number: ${{ steps.apr.outputs.pull-request-number }}
           method: squash
   
-  
   infra_setup:
-    name: Deploy Infrastructure
+    name: Infrastructure
     needs: check_changes
-    if: ${{ (needs.check_changes.outputs.terraform == 'true') && (github.ref == 'refs/heads/main') }}
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -169,6 +174,7 @@ jobs:
           name: ansible-inventory
           path: ./terraform/hosts
           if-no-files-found: error
+  
   servers_configuration:
     name: Deploy Servers Configuration
     needs: [check_changes, infra_setup]
