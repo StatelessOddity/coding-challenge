@@ -106,14 +106,13 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
-          branch: auto-pr-temp-branch
+          branch: dev
           base: main
           title: Automated PR
           body: >
             This PR is auto-generated
             and I'm testing it
           labels: Automated PR
-          delete-branch: true
       - name: Approve Pull Request
         uses: juliangruber/approve-pull-request-action@v2.0.0
         if: contains(github.event.head_commit.message, 'pr-a')
