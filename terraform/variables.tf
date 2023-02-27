@@ -12,8 +12,8 @@ variable "rdx_subnet_count" {
   description = "Number of subnets for the VPC"
   type        = map(number)
   default = {
-    rdx_stack  = 1,
-    database = 2
+    rdx_stack = 1,
+    database  = 2
   }
 }
 
