@@ -1,3 +1,5 @@
+# AMI ID for the RDX stack EC2s
+
 data "aws_ami" "ubuntu" {
 
   most_recent = true
@@ -18,6 +20,8 @@ data "aws_ami" "ubuntu" {
 data "aws_availability_zones" "available" {
   state = "available"
 }
+
+# Ansible inventory used for EC2s configuration
 
 data "template_file" "ansible_inventory" {
   template = file("./templates/hosts.tpl")

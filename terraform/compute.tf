@@ -1,9 +1,11 @@
-resource "aws_instance" "full_node_ec2" {
-  count                  = var.full_node_ec2.count
+# Instances that run Full Nodes with Core API
+
+resource "aws_instance" "full_node" {
+  count                  = var.full_node.count
   ami                    = data.aws_ami.ubuntu.id
-  instance_type          = var.full_node_ec2.instance_type
-  subnet_id              = aws_subnet.rdx_public_subnet[count.index].id
-  vpc_security_group_ids = [aws_security_group.rdx_public_security_group.id]
+  instance_type          = var.full_node.instance_type
+  subnet_id              = aws_subnet.rdx_stack[count.index].id
+  vpc_security_group_ids = [aws_security_group.rdx_stack.id]
   key_name               = aws_key_pair.rdx_key.key_name
   tags = {
     Name = "Full Node ${count.index + 1}"
@@ -17,12 +19,14 @@ resource "aws_instance" "full_node_ec2" {
   }
 }
 
-resource "aws_instance" "data_aggregator_ec2" {
-  count                  = var.data_aggregator_ec2.count
+# Instances that run Data Aggregator
+
+resource "aws_instance" "data_aggregator" {
+  count                  = var.data_aggregator.count
   ami                    = data.aws_ami.ubuntu.id
-  instance_type          = var.data_aggregator_ec2.instance_type
-  subnet_id              = aws_subnet.rdx_public_subnet[count.index].id
-  vpc_security_group_ids = [aws_security_group.rdx_public_security_group.id]
+  instance_type          = var.data_aggregator.instance_type
+  subnet_id              = aws_subnet.rdx_stack[count.index].id
+  vpc_security_group_ids = [aws_security_group.rdx_stack.id]
   key_name               = aws_key_pair.rdx_key.key_name
   tags = {
     Name = "Data Aggregator ${count.index + 1}"
@@ -36,12 +40,14 @@ resource "aws_instance" "data_aggregator_ec2" {
   }
 }
 
-resource "aws_instance" "gateway_api_ec2" {
-  count                  = var.gateway_api_ec2.count
+# Instances that run Gateway APIs
+
+resource "aws_instance" "gateway_api" {
+  count                  = var.gateway_api.count
   ami                    = data.aws_ami.ubuntu.id
-  instance_type          = var.gateway_api_ec2.instance_type
-  subnet_id              = aws_subnet.rdx_public_subnet[count.index].id
-  vpc_security_group_ids = [aws_security_group.rdx_public_security_group.id]
+  instance_type          = var.gateway_api.instance_type
+  subnet_id              = aws_subnet.rdx_stack[count.index].id
+  vpc_security_group_ids = [aws_security_group.rdx_stack.id]
   key_name               = aws_key_pair.rdx_key.key_name
   tags = {
     Name = "Gateway API ${count.index + 1}"
