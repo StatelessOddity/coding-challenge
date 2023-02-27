@@ -14,7 +14,7 @@ resource "aws_internet_gateway" "rdx" {
 }
 
 resource "aws_subnet" "rdx_stack" {
-  count             = var.rdx_subnet_count.public
+  count             = var.subnet_count.rdx_stack
   vpc_id            = aws_vpc.rdx.id
   cidr_block        = var.rdx_stack_cidr_blocks[count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
@@ -24,7 +24,7 @@ resource "aws_subnet" "rdx_stack" {
 }
 
 resource "aws_subnet" "database" {
-  count             = var.rdx_subnet_count.private
+  count             = var.subnet_count.database
   vpc_id            = aws_vpc.rdx.id
   cidr_block        = var.database_cidr_blocks[count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
@@ -45,7 +45,7 @@ resource "aws_route_table" "rdx_stack" {
 }
 
 resource "aws_route_table_association" "rdx_stack" {
-  count          = var.rdx_subnet_count.rdx_stack
+  count          = var.subnet_count.rdx_stack
   route_table_id = aws_route_table.rdx_stack.id
   subnet_id      = aws_subnet.rdx_stack[count.index].id
 }
@@ -58,7 +58,7 @@ resource "aws_route_table" "database" {
 }
 
 resource "aws_route_table_association" "database" {
-  count          = var.rdx_subnet_count.database
+  count          = var.subnet_count.database
   route_table_id = aws_route_table.database.id
   subnet_id      = aws_subnet.database[count.index].id
 }

@@ -8,7 +8,7 @@ variable "rdx_cidr_block" {
   default     = "10.0.0.0/16"
 }
 
-variable "rdx_subnet_count" {
+variable "subnet_count" {
   description = "Number of subnets for the VPC"
   type        = map(number)
   default = {
