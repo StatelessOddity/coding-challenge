@@ -79,6 +79,7 @@ resource "aws_eip" "fullnode" {
 }
 
 resource "aws_eip" "bastion" {
+  count    = var.bastion.count
   instance = aws_instance.bastion[count.index].id
   vpc      = true
   tags = {
