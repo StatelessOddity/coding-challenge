@@ -44,6 +44,7 @@ resource "aws_instance" "gateway_api" {
 }
 
 resource "aws_instance" "monitoring" {
+  count                  = var.monitoring.count
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = var.monitoring.instance_type
   subnet_id              = aws_subnet.rdx_stack[count.index].id
