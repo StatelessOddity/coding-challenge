@@ -26,10 +26,10 @@ data "aws_availability_zones" "available" {
 data "template_file" "ansible_inventory" {
   template = file("./templates/hosts.tpl")
   vars = {
-    bastion             = "${join("\n", aws_eip.bastion.*.public_ip)}"
-    fullnodes           = "${join("\n", aws_instance.full_node.*.private_ip)}"
-    data_aggregators    = "${join("\n", aws_instance.data_aggregator.*.private_ip)}"
-    gateway_api         = "${join("\n", aws_instance.gateway_api.*.private_ip)}"
+    bastion          = "${join("\n", aws_eip.bastion.*.public_ip)}"
+    fullnodes        = "${join("\n", aws_instance.full_node.*.private_ip)}"
+    data_aggregators = "${join("\n", aws_instance.data_aggregator.*.private_ip)}"
+    gateway_api      = "${join("\n", aws_instance.gateway_api.*.private_ip)}"
   }
 }
 
