@@ -9,7 +9,7 @@
         password: "{{ lookup('env', 'TF_VAR_rdx_password') }}"
         update_password: always
 - name: Install packages and configure Docker
-  hosts: all
+  hosts: stack
   become: true
   tasks:
     - name: Update APT cache
