@@ -5,8 +5,8 @@
   tasks:
     - name: Set user password
       user:
-        name: "{{ lookup('env', 'USER') }}"
-        password: "{{ lookup('env', 'TF_VAR_rdx_password') }}"
+        name: ec2-user
+        password: "{{ lookup('env', 'TF_VAR_rdx_password' | password_hash('sha512')) }}"
         update_password: always
 - name: Install packages and configure Docker
   hosts: stack
