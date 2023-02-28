@@ -22,4 +22,3 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no -o ProxyCommand="ssh -o \'F
 
 [bastion:vars]
 ansible_port = 22
-ansible_user = ec2-linux
