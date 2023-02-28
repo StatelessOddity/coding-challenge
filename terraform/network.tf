@@ -69,7 +69,7 @@ resource "aws_db_subnet_group" "database" {
   subnet_ids  = [for subnet in aws_subnet.database : subnet.id]
 }
 
-resource "aws_eip" "fullnode_ip" {
+resource "aws_eip" "fullnode" {
   count    = var.full_node.count
   instance = aws_instance.full_node[count.index].id
   vpc      = true
@@ -78,20 +78,10 @@ resource "aws_eip" "fullnode_ip" {
   }
 }
 
-resource "aws_eip" "data_aggregator_ip" {
-  count    = var.data_aggregator.count
-  instance = aws_instance.data_aggregator[count.index].id
+resource "aws_eip" "bastion" {
+  instance = aws_instance.full_node[count.index].id
   vpc      = true
   tags = {
-    "Name" = "Data Aggregator ${count.index + 1}"
-  }
-}
-
-resource "aws_eip" "gateway_api_ip" {
-  count    = var.gateway_api.count
-  instance = aws_instance.gateway_api[count.index].id
-  vpc      = true
-  tags = {
-    "Name" = "Gateway API IP ${count.index + 1}"
+    "Name" = "Bastion external IP ${count.index + 1}"
   }
 }

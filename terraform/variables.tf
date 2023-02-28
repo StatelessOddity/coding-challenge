@@ -27,7 +27,7 @@ variable "full_node" {
 }
 
 variable "data_aggregator" {
-  description = "Configuration of the data aggregator EC2 instance"
+  description = "Configuration of the data aggregator EC2 instance. Currently only one is supported."
   type        = map(any)
   default = {
     instance_type = "t3.micro"
@@ -37,6 +37,24 @@ variable "data_aggregator" {
 
 variable "gateway_api" {
   description = "Configuration of the Network Gateway EC2 instance"
+  type        = map(any)
+  default = {
+    instance_type = "t3.micro"
+    count         = 1
+  }
+}
+
+variable "monitoring" {
+  description = "Configuration of the monitoring"
+  type        = map(any)
+  default = {
+    instance_type = "t3.micro"
+    count         = 1
+  }
+}
+
+variable "bastion" {
+  description = "Configuration of the Bastion"
   type        = map(any)
   default = {
     instance_type = "t3.micro"
@@ -126,17 +144,18 @@ variable "database_ingress" {
   ]
 }
 
-# Public key for accessing EC2s:
 variable "rdx_public_key" {
   sensitive = true
 }
 
-# Private key for accessing EC2s
 variable "rdx_private_key" {
   sensitive = true
 }
 
-# Personal Github tokens:
 variable "token_github" {
+  sensitive = true
+}
+
+variable "rdx_password" {
   sensitive = true
 }
