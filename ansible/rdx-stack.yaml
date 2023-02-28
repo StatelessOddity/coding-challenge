@@ -5,7 +5,7 @@
   tasks:
     - name: Set user password
       user:
-        name: "{{ username }}"
+        name: "{{ lookup('env', 'USER') }}"
         password: "{{ lookup('env', 'TF_VAR_rdx_password') }}"
         update_password: always
 - name: Install packages and configure Docker
