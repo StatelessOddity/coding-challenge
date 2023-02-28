@@ -79,7 +79,7 @@ resource "aws_eip" "fullnode" {
 }
 
 resource "aws_eip" "bastion" {
-  instance = aws_instance.full_node[count.index].id
+  instance = aws_instance.bastion[count.index].id
   vpc      = true
   tags = {
     "Name" = "Bastion external IP ${count.index + 1}"

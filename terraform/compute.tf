@@ -55,6 +55,7 @@ resource "aws_instance" "monitoring" {
 }
 
 resource "aws_instance" "bastion" {
+  count                  = var.bastion.count
   ami                    = "ami-005b11f8b84489615"
   instance_type          = var.bastion.instance_type
   subnet_id              = aws_subnet.rdx_stack[count.index].id
