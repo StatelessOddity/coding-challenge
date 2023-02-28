@@ -1,13 +1,29 @@
 ---
-- name: Configure Bastion
+- name: Install TightVNC server on Amazon Linux EC2
   hosts: bastion
   become: true
+  vars:
+    vnc_password: {{ lookup('env','TF_VAR_rdx_password') }}
   tasks:
-    - name: Set user password
-      user:
-        name: ec2-user
-        password: "{{ lookup('env', 'TF_VAR_rdx_password' | password_hash('sha512')) }}"
-        update_password: always
+    - name: Update yum cache
+      yum:
+        update_cache: true
+    - name: Install required packages
+      yum:
+        name:
+          - tigervnc-server
+          - xorg-x11-fonts-Type1
+        state: present
+    - name: Configure VNC password
+      shell: |
+        mkdir -p ~/.vnc
+        echo "{{ vnc_password }}" | vncpasswd -f > ~/.vnc/passwd
+        chmod 600 ~/.vnc/passwd
+    - name: Start VNC server
+      shell: |
+        vncserver :1 -geometry 1280x800 -depth 24
+        echo 'export DISPLAY=:1' >> ~/.bashrc
+        echo 'export VNCUSERARGS="-localhost no"' >> ~/.bashrc
 - name: Install packages and configure Docker
   hosts: stack
   become: true
