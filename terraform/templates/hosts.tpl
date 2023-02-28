@@ -4,7 +4,7 @@ ${bastion}
 [stack]
 ${fullnodes}
 ${data_aggregators}
-${gateway_api_ips}
+${gateway_api}
 
 [fullnodes]
 ${fullnodes}
