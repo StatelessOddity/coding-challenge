@@ -1,19 +1,19 @@
 [bastion]
-${bastion_ip}
+${bastion}
 
 [stack]
 ${fullnodes}
-${data_aggregator_ips}
+${data_aggregators}
 ${gateway_api_ips}
 
 [fullnodes]
 ${fullnodes}
 
 [data_aggregators]
-${data_aggregator_ips}
+${data_aggregators}
 
 [gateway_apis]
-${gateway_api_ips}
+${gateway_api}
 
 [stack:vars]
 ansible_port = 22
