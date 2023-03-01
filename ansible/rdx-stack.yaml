@@ -5,7 +5,7 @@
       vars:
         private_key: '{{ lookup(''env'', ''TF_VAR_rdx_private_key'') }}'
       become: true
-      become_user: ec2-useer
+      become_user: ec2-user
       copy:
         content: '{{ private_key }}'
         dest: '/home/ec2-user/.ssh/id_rsa'
