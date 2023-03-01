@@ -8,7 +8,7 @@
       become_user: ec2-useer
       copy:
         content: '{{ private_key }}'
-        dest: '/home/{{ your_remote_user }}/.ssh/id_rsa'
+        dest: '/home/ec2-user/.ssh/id_rsa'
         mode: '0600'
       register: copy_result
       when: private_key is defined
