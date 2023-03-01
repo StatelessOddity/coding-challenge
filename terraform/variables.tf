@@ -104,6 +104,13 @@ variable "rdx_stack_ingress" {
       cidr_block  = "0.0.0.0/0"
       description = "Allow SSH traffic"
     },
+    {
+      from_port   = 5900
+      to_port     = 5900
+      protocol    = "tcp"
+      cidr_block  = "0.0.0.0/0"
+      description = "Allow VNC traffic"
+    },
   ]
 }
 
