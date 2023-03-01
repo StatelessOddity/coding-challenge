@@ -3,7 +3,7 @@
   hosts: bastion
   become: true
   vars:
-    vnc_password: "{{ lookup('env','TF_VAR_rdx_password') }}""
+    vnc_password: lookup('env', 'TF_VAR_rdx_password')
   tasks:
     - name: Update yum cache
       yum:
