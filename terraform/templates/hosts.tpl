@@ -20,5 +20,5 @@ ansible_port = 22
 ansible_user = ubuntu
 ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q ec2-user@${bastion}"'
 
-[stack:bastion]
+[baastiion:vars]
 ansible_user = ec2-user
