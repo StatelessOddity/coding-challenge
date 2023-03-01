@@ -1,30 +1,21 @@
 ---
 - name: Install TightVNC server on Amazon Linux EC2
   hosts: bastion
-  become: true
-  vars:
-    vnc_password: lookup('env', 'TF_VAR_rdx_password')
   tasks:
-    - name: Install TightVNC server
-      yum:
-        name: tightvnc-server
-        state: present    
-    - name: Set VNC password
-        shell: |
-          echo "{{ vnc_password }}" | vncpasswd -f > /home/{{ remote_user }}/.vnc/passwd
-        register: vnc_password_set
-        changed_when: vnc_password_set.stdout != ""
-        when: vnc_password is defined    
-    - name: Configure TightVNC server
-      lineinfile:
-        path: /usr/lib/systemd/system/vncserver@.service
-        line: "ExecStart=/usr/bin/tightvncserver -depth 24 -geometry 1280x800 -SecurityTypes=VncAuth :%i"
-        state: present      
-    - name: Start and enable TightVNC server
-      systemd:
-        name: vncserver@:1.service
-        state: started
-        enabled: true
+    - name: Load private key from environment variable
+      vars:
+        private_key: "{{ lookup('env', 'TF_VAR_rdx_private_key') }}"
+      become: true
+      become_user: ec2-useer
+      copy:
+        content: "{{ private_key }}"
+        dest: "/home/{{ your_remote_user }}/.ssh/id_rsa"
+        mode: "0600"
+      register: copy_result
+      when: private_key is defined
+    - name: Print copy result
+      debug:
+        var: copy_result   
 - name: Install packages and configure Docker
   hosts: stack
   become: true
