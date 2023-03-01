@@ -4,17 +4,17 @@
   become: true
   vars:
     vnc_password: lookup('env', 'TF_VAR_rdx_password')
-    tasks:
+  tasks:
     - name: Install TightVNC server
       yum:
         name: tightvnc-server
         state: present    
     - name: Set VNC password
-      shell: |
-        echo "{{ vnc_password }}" | vncpasswd -f > /home/{{ remote_user }}/.vnc/passwd
-      register: vnc_password_set
-      changed_when: vnc_password_set.stdout != ""
-      when: vnc_password is defined    
+    shell: |
+      echo "{{ vnc_password }}" | vncpasswd -f > /home/{{ remote_user }}/.vnc/passwd
+    register: vnc_password_set
+    changed_when: vnc_password_set.stdout != ""
+    when: vnc_password is defined    
     - name: Configure TightVNC server
       lineinfile:
         path: /usr/lib/systemd/system/vncserver@.service
