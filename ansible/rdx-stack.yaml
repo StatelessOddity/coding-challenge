@@ -18,9 +18,6 @@
 - name: Install packages and configure Docker
   hosts: stack
   become: true
-#    - name: Update APT cache
-#      apt:
-#        update_cache: true
     - name: Install packages
       apt:
         name:
