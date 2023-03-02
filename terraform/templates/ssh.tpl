@@ -1,4 +1,4 @@
-Host ${stack_network_prefix}.*
+Host 10.0.*
   ProxyCommand           ssh -A -W %h:%p ec2-user@${bastion}
 
 Host *

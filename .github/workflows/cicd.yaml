@@ -173,7 +173,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         name: Upload SSH Configuration
         with:
-          name: ssh-configuraation
+          name: ssh-configuration
           path: ./terraform/ssh.cfg
           if-no-files-found: error
   
