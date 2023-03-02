@@ -17,7 +17,7 @@
         var: copy_result
 - name: Install packages and configure Docker
   hosts: stack
-  become: true
+  become: false
   tasks:
     - name: Update APT cache
       apt:
