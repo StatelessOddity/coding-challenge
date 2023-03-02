@@ -17,7 +17,7 @@
         var: copy_result
 - name: Install packages and configure Docker
   hosts: stack
-  become: false
+  become: true
   tasks:
     - name: Test
       command: whoami
