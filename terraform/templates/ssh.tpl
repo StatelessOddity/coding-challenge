@@ -3,6 +3,6 @@ Host 10.0.*
 
 Host *
   ControlMaster          auto
-  ControlPath            ~/.ssh/mux-%r@%h:%p
+  ControlPath            /home/runner/.sshmux-%r@%h:%p
   ControlPersist         15m
-  IdentityFile             ~/.ssh/id_rsa
+  IdentityFile             /home/runner/.ssh/id_rsa
