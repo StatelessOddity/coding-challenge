@@ -1,15 +1,14 @@
----
 - name: Install TightVNC server on Amazon Linux EC2
   hosts: bastion
   become: true
   vars:
-    private_key: "{{ lookup('env', 'TF_VAR_rdx_private_key') }}"
+    private_key: '{{ lookup(''env'', ''TF_VAR_rdx_private_key'') }}'
   tasks:
     - name: Load private key from environment variable
       copy:
-        content: "{{ private_key }}"
+        content: '{{ private_key }}'
         dest: /home/ec2-user/.ssh/id_rsa
-        mode: "0600"
+        mode: '0600'
       register: copy_result
       when: private_key is defined
     - name: Print copy result
@@ -18,8 +17,10 @@
 - name: Install packages and configure Docker
   hosts: stack
   become: true
+  tasks:
     - name: Install packages
       apt:
+        name:
           - wget
           - docker.io
           - docker-compose
