@@ -33,7 +33,20 @@ data "template_file" "ansible_inventory" {
   }
 }
 
+data "template_file" "ssh_config" {
+  template = file("./templates/ssh.tpl")
+  vars = {
+    stack_network_prefix = "${join("\n", aws_instance.full_node.*.private_ip)}"
+    bastion              = "${join(".", slice(split(aws_eip.bastion[0].public_ip, "."), 0, 1))}"
+  }
+}
+
 resource "local_file" "ansible_inventory" {
   content  = data.template_file.ansible_inventory.rendered
   filename = "hosts"
+}
+
+resource "local_file" "ssh_config" {
+  content  = data.template_file.ssh_config.rendered
+  filename = "ssh.cfg"
 }
