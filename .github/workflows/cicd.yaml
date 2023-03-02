@@ -170,12 +170,6 @@ jobs:
           name: ansible-inventory
           path: ./terraform/hosts
           if-no-files-found: error
-      - uses: actions/upload-artifact@v3
-        name: Upload SSH Configuration
-        with:
-          name: ssh-configuration
-          path: ./terraform/ssh.cfg
-          if-no-files-found: error
   
   servers_configuration:
     name: Configuration
@@ -201,11 +195,6 @@ jobs:
         with:
           path: ./ansible
           name: ansible-inventory
-      - uses: actions/download-artifact@v3
-        name: Download SSH Configuration
-        with:
-          path: ./ansible
-          name: ssh-configuration
       - name: Install private SSH key
         uses: shimataro/ssh-key-action@v2
         with:
