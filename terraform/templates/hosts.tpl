@@ -21,4 +21,4 @@ ansible_ssh_user=ec2-user
 [stack:vars]
 ansible_ssh_user=ubuntu
 ansible_ssh_private_key_file=/home/runner/.ssh/id_rsa
-ansible_ssh_common_args= -o ProxyCommand="ssh -q ec2-user@35.170.177.110 -i /home/runner/.ssh/id_rsa -W %h:%p"
+ansible_ssh_common_args= -o ProxyCommand="ssh -q ec2-user@${bastion} -i /home/runner/.ssh/id_rsa -W %h:%p"

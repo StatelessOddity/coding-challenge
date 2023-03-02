@@ -20,7 +20,7 @@
   become: false
   tasks:
     - name: Test
-      command: sudo rngd -r /dev/random
+      command: whoami
       register: user
     - debug: var=user
     - name: Update APT cache
