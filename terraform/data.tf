@@ -41,10 +41,6 @@ data "template_file" "ssh_config" {
   }
 }
 
-
-
-join(".", take(split(var.ip_address, "."), 2))
-
 resource "local_file" "ansible_inventory" {
   content  = data.template_file.ansible_inventory.rendered
   filename = "hosts"
