@@ -204,6 +204,5 @@ jobs:
           if_key_exists: fail
       - name: Deploy servers configuration
         run: |
-          ls -la
           cat hosts
           ansible-playbook -i hosts -u runner rdx-stack.yaml
