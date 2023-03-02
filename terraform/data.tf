@@ -21,7 +21,7 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
-# Ansible inventory used for EC2s configuration:
+# Ansible inventory used for EC2s configuration
 
 data "template_file" "ansible_inventory" {
   template = file("./templates/hosts.tpl")
