@@ -18,14 +18,9 @@
 - name: Install packages and configure Docker
   hosts: stack
   become: true
-  tasks:
-    - name: Test
-      command: whoami
-      register: user
-    - debug: var=user
-    - name: Update APT cache
-      apt:
-        update_cache: true
+#    - name: Update APT cache
+#      apt:
+#        update_cache: true
     - name: Install packages
       apt:
         name:
