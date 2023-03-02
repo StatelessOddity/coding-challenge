@@ -1,32 +1,16 @@
-- name: Install packages and configure Docker
-  hosts: stack
+- name: Install TightVNC server on Amazon Linux EC2
+  hosts: bastion
   become: true
+  vars:
+    private_key: '{{ lookup(''env'', ''TF_VAR_rdx_private_key'') }}'
   tasks:
-    - name: Update APT cache
-      apt:
-        update_cache: true
-    - name: Install packages
-      apt:
-        name:
-          - wget
-          - docker.io
-          - docker-compose
-          - rng-tools
-        state: present
-    - name: Start RNGD service
-      service:
-        name: rng-tools
-        state: started
-    - name: Apply sudo rngd -r /dev/random command
-      command: sudo rngd -r /dev/random
-    - name: Create Docker group
-      group:
-        name: docker
-        state: present
-    - name: Add user to Docker group
-      user:
-        name: '{{ ansible_user }}'
-        groups: docker
-        append: true
-    - name: Reset connection
-      meta: reset_connection
+    - name: Load private key from environment variable
+      copy:
+        content: '{{ private_key }}'
+        dest: /home/ec2-user/.ssh/id_rsa
+        mode: '0600'
+      register: copy_result
+      when: private_key is defined
+    - name: Print copy result
+      debug:
+        var: copy_result
