@@ -20,7 +20,6 @@
   become: true
     - name: Install packages
       apt:
-        name:
           - wget
           - docker.io
           - docker-compose
