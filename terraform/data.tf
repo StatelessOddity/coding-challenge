@@ -36,8 +36,8 @@ data "template_file" "ansible_inventory" {
 data "template_file" "ssh_config" {
   template = file("./templates/ssh.tpl")
   vars = {
-    stack_network_prefix = "${join("\n", aws_instance.full_node.*.private_ip)}"
-    bastion              = "${join(".", slice(split(aws_eip.bastion[0].public_ip, "."), 0, 1))}"
+    stack_network_prefix = "${join(".", slice(split(aws_instance.full_node[0].private_ip, "."), 0, 1))}"
+    bastion              = "${join("\n", aws_eip.bastion.*.public_ip)}"
   }
 }
 
