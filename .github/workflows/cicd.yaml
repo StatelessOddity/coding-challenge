@@ -206,4 +206,4 @@ jobs:
         run: |
           ls -la
           cat hosts
-          ansible-playbook -i hosts rdx-stack.yaml
+          ansible-playbook -i hosts -u ec2-user rdx-stack.yaml
