@@ -22,6 +22,7 @@
     - name: Update and upgrade apt packages
       apt:
         update_cache: true
+      register: update-cache  
     - name: Install packages
       apt:
         name:
@@ -29,7 +30,8 @@
           - docker.io
           - docker-compose
           - rng-tools
-        state: present
+        state: present        
+    - debug: var=update-cache   
     - name: Start RNGD service
       service:
         name: rng-tools
