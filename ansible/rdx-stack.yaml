@@ -21,7 +21,7 @@
   tasks:
     - name: Update and upgrade apt packages
       apt:
-        update_cache: yes
+        update_cache: true
     - name: Install packages
       apt:
         name:
