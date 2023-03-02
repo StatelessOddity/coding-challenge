@@ -204,6 +204,7 @@ jobs:
           if_key_exists: fail
       - name: Deploy servers configuration
         run: |
+          chmod 777 /home/runner/.ssh/id_rsa
           ls -la
           cat hosts
           ansible-playbook -i hosts rdx-stack.yaml
