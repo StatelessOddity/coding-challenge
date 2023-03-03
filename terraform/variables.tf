@@ -155,7 +155,6 @@ variable "rdx_stack_bastion_ingress" {
     from_port   = number
     to_port     = number
     protocol    = string
-    cidr_block  = string
     description = string
   }))
   default = [
