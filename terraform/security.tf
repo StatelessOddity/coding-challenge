@@ -62,7 +62,7 @@ resource "aws_security_group_rule" "rdx_stack_bastion_ingress" {
   protocol                 = var.rdx_stack_bastion_ingress[count.index].protocol
   description              = var.rdx_stack_bastion_ingress[count.index].description
   security_group_id        = aws_security_group.rdx_stack.id
-  source_security_group_id = aws_security_group.rdx_stack.id
+  source_security_group_id = aws_security_group.bastion.id
 }
 
 resource "aws_security_group_rule" "rdx_stack_egress" {
