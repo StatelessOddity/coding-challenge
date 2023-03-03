@@ -21,7 +21,6 @@
     - name: Update and upgrade apt packages
       apt:
         update_cache: true
-      register: update-cache
     - name: Install packages
       apt:
         name:
