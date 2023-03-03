@@ -9,7 +9,7 @@ resource "aws_security_group" "bastion" {
 }
 
 resource "aws_security_group_rule" "bastion_ingress_web" {
-  count             = length(var.bastion_ingress)
+  count             = length(var.bastion_web_ingress)
   type              = "ingress"
   from_port         = var.bastion_web_ingress[count.index].from_port
   to_port           = var.bastion_web_ingress[count.index].to_port
