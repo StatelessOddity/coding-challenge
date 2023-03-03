@@ -2,8 +2,8 @@ resource "aws_instance" "bastion" {
   count                       = var.bastion.count
   ami                         = "ami-005b11f8b84489615"
   instance_type               = var.bastion.instance_type
-  subnet_id                   = aws_subnet.rdx_stack[count.index].id
-  vpc_security_group_ids      = [aws_security_group.rdx_stack.id]
+  subnet_id                   = aws_subnet.bastion[count.index].id
+  vpc_security_group_ids      = [aws_security_group.bastion.id]
   key_name                    = aws_key_pair.rdx_key.key_name
   associate_public_ip_address = var.bastion.public_ip
   tags = {
