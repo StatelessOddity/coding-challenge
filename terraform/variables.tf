@@ -100,14 +100,14 @@ variable "bastion_web_ingress" {
       to_port     = 22
       protocol    = "tcp"
       cidr_block  = "0.0.0.0/0"
-      description = "Allow SSH traffic"
+      description = "SSH"
     },
     {
       from_port   = 5900
       to_port     = 5900
       protocol    = "tcp"
       cidr_block  = "0.0.0.0/0"
-      description = "Allow VNC traffic"
+      description = "VNC"
     },
   ]
 }
@@ -126,7 +126,7 @@ variable "bastion_egress" {
       to_port     = 0
       protocol    = "-1"
       cidr_block  = "0.0.0.0/0"
-      description = "Allow all outbound traffic"
+      description = "Outbound"
     },
   ]
 }
@@ -145,7 +145,7 @@ variable "rdx_stack_web_ingress" {
       to_port     = 30000
       protocol    = "tcp"
       cidr_block  = "0.0.0.0/0"
-      description = "GOSSIP port for node to node communication"
+      description = "GOSSIP"
     },
   ]
 }
@@ -162,13 +162,13 @@ variable "rdx_stack_bastion_ingress" {
       from_port   = 443
       to_port     = 443
       protocol    = "tcp"
-      description = "API endpoints"
+      description = "API"
     },
     {
       from_port   = 22
       to_port     = 22
       protocol    = "tcp"
-      description = "Allow SSH traffic"
+      description = "SSH"
     },
   ]
 }
@@ -187,7 +187,7 @@ variable "rdx_stack_egress" {
       to_port     = 0
       protocol    = "-1"
       cidr_block  = "0.0.0.0/0"
-      description = "Allow all outbound traffic"
+      description = "Outbound"
     },
   ]
 }
@@ -204,7 +204,7 @@ variable "database_ingress" {
       from_port   = 443
       to_port     = 443
       protocol    = "tcp"
-      description = "Allow PostgreSQL traffic"
+      description = "PostgreSQL"
     },
   ]
 }
