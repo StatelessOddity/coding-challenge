@@ -27,7 +27,7 @@ resource "aws_subnet" "bastion" {
   cidr_block        = var.bastion_cidr_blocks[count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
   tags = {
-    Name = "RDX Bastion ${count.index + 1}"
+    Name = "Bastion ${count.index + 1}"
   }
 }
 
@@ -38,7 +38,7 @@ resource "aws_route_table" "bastion" {
     gateway_id = aws_internet_gateway.rdx.id
   }
   tags = {
-    Name = "RDX Bastion route table"
+    Name = "Bastion"
   }
 }
 
@@ -68,7 +68,7 @@ resource "aws_subnet" "database" {
   cidr_block        = var.database_cidr_blocks[count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
   tags = {
-    Name = "RDX Database ${count.index + 1}"
+    Name = "Database ${count.index + 1}"
   }
 }
 
@@ -81,7 +81,7 @@ resource "aws_db_subnet_group" "database" {
 resource "aws_route_table" "database" {
   vpc_id = aws_vpc.rdx.id
   tags = {
-    Name = "RDX private route table"
+    Name = "Database"
   }
 }
 
@@ -112,7 +112,7 @@ resource "aws_route_table" "rdx_stack" {
     gateway_id = aws_internet_gateway.rdx.id
   }
   tags = {
-    Name = "RDX Stack route table"
+    Name = "RDX Stack"
   }
 }
 

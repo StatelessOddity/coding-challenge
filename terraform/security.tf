@@ -6,6 +6,9 @@ resource "aws_security_group" "bastion" {
   name        = "Bastion"
   description = "Security group for Bastion subnet"
   vpc_id      = aws_vpc.rdx.id
+  tags = {
+    Name = "Bastion"
+  }
 }
 
 resource "aws_security_group_rule" "bastion_ingress_web" {
@@ -35,7 +38,7 @@ resource "aws_security_group_rule" "bastion_egress" {
 #################################################################
 
 resource "aws_security_group" "rdx_stack" {
-  name        = "rdx_stack"
+  name        = "RDX Stack"
   description = "Security for compute EC2 instances of Full Node, Gateway and monitoring"
   vpc_id      = aws_vpc.rdx.id
 }
@@ -78,7 +81,7 @@ resource "aws_security_group_rule" "rdx_stack_egress" {
 #################################################################
 
 resource "aws_security_group" "database" {
-  name        = "database"
+  name        = "Database"
   description = "security group for the database"
   vpc_id      = aws_vpc.rdx.id
 }
