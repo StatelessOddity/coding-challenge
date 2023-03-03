@@ -12,6 +12,7 @@ variable "subnet_count" {
   description = "Number of subnets for the VPC"
   type        = map(number)
   default = {
+    bastion   = 1,
     rdx_stack = 1,
     database  = 2
   }
@@ -23,6 +24,7 @@ variable "full_node" {
   default = {
     instance_type = "t3.micro"
     count         = 1
+    public_ip     = true
   }
 }
 
@@ -32,6 +34,7 @@ variable "data_aggregator" {
   default = {
     instance_type = "t3.micro"
     count         = 1
+    public_ip     = true
   }
 }
 
@@ -41,6 +44,7 @@ variable "gateway_api" {
   default = {
     instance_type = "t3.micro"
     count         = 1
+    public_ip     = true
   }
 }
 
@@ -50,6 +54,7 @@ variable "monitoring" {
   default = {
     instance_type = "t3.micro"
     count         = 1
+    public_ip     = true
   }
 }
 
@@ -59,22 +64,29 @@ variable "bastion" {
   default = {
     instance_type = "t3.micro"
     count         = 1
+    public_ip     = false
   }
 }
 
-variable "rdx_stack_cidr_blocks" {
+variable "bastion_cidr_blocks" {
   description = "Avalible CIRD blocks for RDX public subnets"
   type        = list(string)
   default     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24", "10.0.4.0/24"]
 }
 
+variable "rdx_stack_cidr_blocks" {
+  description = "Avalible CIRD blocks for RDX public subnets"
+  type        = list(string)
+  default     = ["10.0.11.0/24", "10.0.12.0/24", "10.0.13.0/24", "10.0.14.0/24"]
+}
+
 variable "database_cidr_blocks" {
   description = "Avalible CIRD blocks for RDX private subnets"
   type        = list(string)
-  default     = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24", "10.0.104.0/24"]
+  default     = ["10.0.21.0/24", "10.0.22.0/24", "10.0.23.0/24", "10.0.24.0/24"]
 }
 
-variable "rdx_stack_ingress" {
+variable "bastion_web_ingress" {
   type = list(object({
     from_port   = number
     to_port     = number
@@ -83,20 +95,6 @@ variable "rdx_stack_ingress" {
     description = string
   }))
   default = [
-    {
-      from_port   = 443
-      to_port     = 443
-      protocol    = "tcp"
-      cidr_block  = "0.0.0.0/0"
-      description = "Allow HTTPS traffic"
-    },
-    {
-      from_port   = 30000
-      to_port     = 30000
-      protocol    = "tcp"
-      cidr_block  = "0.0.0.0/0"
-      description = "Allow traffic on port 30000"
-    },
     {
       from_port   = 22
       to_port     = 22
@@ -110,6 +108,68 @@ variable "rdx_stack_ingress" {
       protocol    = "tcp"
       cidr_block  = "0.0.0.0/0"
       description = "Allow VNC traffic"
+    },
+  ]
+}
+
+variable "bastion_egress" {
+  type = list(object({
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    cidr_block  = string
+    description = string
+  }))
+  default = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_block  = "0.0.0.0/0"
+      description = "Allow all outbound traffic"
+    },
+  ]
+}
+
+variable "rdx_stack_web_ingress" {
+  type = list(object({
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    cidr_block  = string
+    description = string
+  }))
+  default = [
+    {
+      from_port   = 30000
+      to_port     = 30000
+      protocol    = "tcp"
+      cidr_block  = "0.0.0.0/0"
+      description = "GOSSIP port for node to node communication"
+    },
+  ]
+}
+
+variable "rdx_stack_bastion_ingress" {
+  type = list(object({
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    cidr_block  = string
+    description = string
+  }))
+  default = [
+    {
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      description = "API endpoints"
+    },
+    {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      description = "Allow SSH traffic"
     },
   ]
 }
@@ -132,7 +192,6 @@ variable "rdx_stack_egress" {
     },
   ]
 }
-
 
 variable "database_ingress" {
   type = list(object({
